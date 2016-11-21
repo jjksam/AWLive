@@ -11,8 +11,8 @@
 @interface AWHWH264Encoder()
 @property (nonatomic, unsafe_unretained) VTCompressionSessionRef vEnSession;
 @property (nonatomic, strong) dispatch_semaphore_t vSemaphore;
-@property (nonatomic, strong) NSData *spsPpsData;
-@property (nonatomic, strong) NSData *naluData;
+@property (nonatomic, copy) NSData *spsPpsData;
+@property (nonatomic, copy) NSData *naluData;
 @property (nonatomic, unsafe_unretained) BOOL isKeyFrame;
 
 @end
@@ -127,6 +127,12 @@ static void vtCompressionSessionCallback (void * CM_NULLABLE outputCallbackRefCo
     if (!encoder.spsPpsData) {
         if (isKeyFrame) {
             CMFormatDescriptionRef sampleBufFormat = CMSampleBufferGetFormatDescription(sampleBuffer);
+            
+            NSDictionary *dict = (__bridge NSDictionary *)CMFormatDescriptionGetExtensions(sampleBufFormat);
+            
+            encoder.spsPpsData = dict[@"SampleDescriptionExtensionAtoms"][@"avcC"];
+            
+            /*
             size_t spsLen, spsCount;
             const uint8_t *sps;
             status = CMVideoFormatDescriptionGetH264ParameterSetAtIndex(sampleBufFormat, 0, &sps, &spsLen, &spsCount, 0 );
@@ -143,7 +149,7 @@ static void vtCompressionSessionCallback (void * CM_NULLABLE outputCallbackRefCo
                 }
             }else{
                 [encoder onErrorWithCode:AWEncoderErrorCodeEncodeGetSpsPpsFailed des:@"got sps failed"];
-            }
+            }*/
         }
         needSpsPps = YES;
     }
@@ -166,6 +172,8 @@ static void vtCompressionSessionCallback (void * CM_NULLABLE outputCallbackRefCo
             currReadPos += 4 + naluLen;
             
             encoder.isKeyFrame = isKeyFrame;
+            
+            break;
         }
     }else{
         [encoder onErrorWithCode:AWEncoderErrorCodeEncodeGetH264DataFailed des:@"got h264 data failed"];
@@ -181,11 +189,11 @@ static void vtCompressionSessionCallback (void * CM_NULLABLE outputCallbackRefCo
     //创建 video encode session
     OSStatus status = VTCompressionSessionCreate(NULL, (int32_t)(self.videoConfig.width), (int32_t)self.videoConfig.height, kCMVideoCodecType_H264, NULL, NULL, NULL, vtCompressionSessionCallback, (__bridge void * _Nullable)(self), &_vEnSession);
     if (status == noErr) {
-        VTSessionSetProperty(_vEnSession, kVTCompressionPropertyKey_ProfileLevel, kVTProfileLevel_H264_Main_AutoLevel);
+        VTSessionSetProperty(_vEnSession, kVTCompressionPropertyKey_ProfileLevel, kVTProfileLevel_H264_Baseline_AutoLevel);
         VTSessionSetProperty(_vEnSession, kVTCompressionPropertyKey_AverageBitRate, (__bridge CFTypeRef)@(self.videoConfig.bitrate));
         VTSessionSetProperty(_vEnSession, kVTCompressionPropertyKey_RealTime, kCFBooleanTrue);
         VTSessionSetProperty(_vEnSession, kVTCompressionPropertyKey_AllowFrameReordering, kCFBooleanFalse);
-        VTSessionSetProperty(_vEnSession, kVTCompressionPropertyKey_MaxKeyFrameInterval, (__bridge CFTypeRef)@(0));
+        VTSessionSetProperty(_vEnSession, kVTCompressionPropertyKey_MaxKeyFrameInterval, (__bridge CFTypeRef)@(60));
         
         //准备开始
         status = VTCompressionSessionPrepareToEncodeFrames(_vEnSession);

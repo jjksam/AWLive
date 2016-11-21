@@ -80,6 +80,21 @@ extern void aw_streamer_send_audio_data(aw_flv_audio_tag *audio_tag){
     aw_streamer_send_flv_tag_to_rtmp(&audio_tag->common_tag);
 }
 
+//script tag ----
+extern void aw_streamer_send_script_data(){
+    if (!aw_streamer_is_streaming()) {
+        aw_log("[E] aw_streamer_send_script_data when rtmp is not valid");
+        return;
+    }
+    
+    if (s_rtmp_ctx->is_header_sent) {
+        return;
+    }
+    
+    aw_streamer_send_flv_tag_to_rtmp(&alloc_aw_flv_script_tag()->common_tag);
+}
+
+
 //rtmp------
 
 static void aw_streamer_send_flv_tag_to_rtmp(aw_flv_common_tag *common_tag){

@@ -254,6 +254,10 @@ extern void aw_rtmp_state_changed_cb_in_oc(aw_rtmp_state old_state, aw_rtmp_stat
         if (weakSelf.isSpsPpsAndAudioSpecificConfigSent) {
             return;
         }
+        
+        //script tag
+        aw_streamer_send_script_data();
+        
         //video sps pps tag
         aw_flv_video_tag *spsPpsTag = [weakSelf.encoderManager.videoEncoder createSpsPpsFlvTag];
         if (spsPpsTag) {
