@@ -29,7 +29,7 @@ extern void aw_streamer_send_video_data(aw_flv_video_tag *video_tag);
 //发送音频flv tag
 extern void aw_streamer_send_audio_data(aw_flv_audio_tag *audio_tag);
 //发送script tag
-extern void aw_streamer_send_script_data();
+extern void aw_streamer_send_script_data(aw_flv_script_tag *script_tag);
 
 //发送sps pps
 extern void aw_streamer_send_video_sps_pps_tag(aw_flv_video_tag *sps_pps_tag);

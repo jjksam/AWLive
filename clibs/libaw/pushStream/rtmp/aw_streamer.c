@@ -81,7 +81,7 @@ extern void aw_streamer_send_audio_data(aw_flv_audio_tag *audio_tag){
 }
 
 //script tag ----
-extern void aw_streamer_send_script_data(){
+extern void aw_streamer_send_script_data(aw_flv_script_tag *script_tag){
     if (!aw_streamer_is_streaming()) {
         aw_log("[E] aw_streamer_send_script_data when rtmp is not valid");
         return;
@@ -91,7 +91,7 @@ extern void aw_streamer_send_script_data(){
         return;
     }
     
-    aw_streamer_send_flv_tag_to_rtmp(&alloc_aw_flv_script_tag()->common_tag);
+    aw_streamer_send_flv_tag_to_rtmp(&script_tag->common_tag);
 }
 
 
