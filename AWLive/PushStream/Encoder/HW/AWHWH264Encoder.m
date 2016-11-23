@@ -172,8 +172,6 @@ static void vtCompressionSessionCallback (void * CM_NULLABLE outputCallbackRefCo
             currReadPos += 4 + naluLen;
             
             encoder.isKeyFrame = isKeyFrame;
-            
-            break;
         }
     }else{
         [encoder onErrorWithCode:AWEncoderErrorCodeEncodeGetH264DataFailed des:@"got h264 data failed"];
