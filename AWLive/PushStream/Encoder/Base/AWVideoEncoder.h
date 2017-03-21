@@ -13,6 +13,7 @@
 @interface AWVideoEncoder : AWEncoder
 
 @property (nonatomic, copy) AWVideoConfig *videoConfig;
+@property (assign) BOOL enableBeautyFace;
 
 //旋转
 - (NSData *)rotateNV12Data:(NSData *)nv12Data;

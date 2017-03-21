@@ -143,7 +143,7 @@ extern void aw_rtmp_state_changed_cb_in_oc(aw_rtmp_state old_state, aw_rtmp_stat
 }
 
 -(void) switchCamera{}
-
+- (void)switchBeautyFace{}
 -(void) onStopCapture{}
 
 -(void) onStartCapture{}

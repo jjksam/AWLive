@@ -61,6 +61,8 @@ extern void aw_rtmp_state_changed_cb_in_oc(aw_rtmp_state old_state, aw_rtmp_stat
 //切换摄像头
 -(void) switchCamera;
 
+- (void)switchBeautyFace;
+
 //停止capture
 -(void) stopCapture;
 

@@ -109,6 +109,16 @@ static NSString *sRtmpUrl = @"rtmp://rtmp-w.quklive.com/live/w1486371182801972";
     [self.switchBtn setTintColor:[UIColor whiteColor]];
     [self.switchBtn addTarget:self action:@selector(onSwitchClick) forControlEvents:UIControlEventTouchUpInside];
     [self.viewController.view addSubview:self.switchBtn];
+    
+    UIButton *beautyFace = [[UIButton alloc] init];
+    [beautyFace setTitle:@"美颜" forState:UIControlStateNormal];
+    [beautyFace setTintColor:[UIColor whiteColor]];
+    [beautyFace addTarget:self action:@selector(onBeautyFace) forControlEvents:UIControlEventTouchUpInside];
+    [self.viewController.view addSubview:beautyFace];
+}
+
+- (void)onBeautyFace {
+
 }
 
 -(UIImage *)imageWithPath:(NSString *)path scale:(CGFloat)scale{

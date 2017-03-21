@@ -60,7 +60,7 @@
     
     uint8_t *uv_frame = CVPixelBufferGetBaseAddressOfPlane(pixelBuf, 1);
     memcpy(uv_frame, yuv_frame + y_size, uv_size * 2);
-    
+
     //硬编码 CmSampleBufRef
     
     //时间戳

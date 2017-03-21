@@ -58,7 +58,52 @@
     [self unlockFramebufferAfterReading];
     
     NSData *yuvData = [NSData dataWithBytesNoCopy:yuv_bytes length:yuv_len];
+/* 这里只对输出生效，要渲染GPUImageView才能正确预览，考虑直接不用系统filter
+    //现在要把NV12数据放入 CVPixelBufferRef中，因为 硬编码主要调用VTCompressionSessionEncodeFrame函数，此函数不接受yuv数据，但是接受CVPixelBufferRef类型。
+    CVPixelBufferRef pixelBuf = NULL;
+    //初始化pixelBuf，数据类型是kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange，此类型数据格式同NV12格式相同。
+    CVPixelBufferCreate(NULL, width, height, kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange, NULL, &pixelBuf);
     
+    // Lock address，锁定数据，应该是多线程防止重入操作。
+    if(CVPixelBufferLockBaseAddress(pixelBuf, 0) == kCVReturnSuccess){
+//        [self onErrorWithCode:AWEncoderErrorCodeLockSampleBaseAddressFailed des:@"encode video lock base address failed"];
+        
+        //将yuv数据填充到CVPixelBufferRef中
+        size_t y_size = aw_stride(width) * height;
+        size_t uv_size = y_size / 4;
+        uint8_t *yuv_frame = (uint8_t *)yuvData.bytes;
+        
+        //处理y frame
+        uint8_t *y_frame = CVPixelBufferGetBaseAddressOfPlane(pixelBuf, 0);
+        memcpy(y_frame, yuv_frame, y_size);
+        
+        uint8_t *uv_frame = CVPixelBufferGetBaseAddressOfPlane(pixelBuf, 1);
+        memcpy(uv_frame, yuv_frame + y_size, uv_size * 2);
+// CIFilter 尝试从这里入手处理
+    CIContext *context = [CIContext new];
+    CIFilter *filter = [CIFilter filterWithName:@"CIFaceBalance"];
+    CIImage *ciImage = [CIImage imageWithCVPixelBuffer:pixelBuf];
+    [filter setValue:ciImage forKey:kCIInputImageKey];
+//    CIImage *resultImage = filter.outputImage;
+//    [context render:resultImage toCVPixelBuffer:pixelBuf];
+
+
+    CIImage *resultImage = [filter.outputImage imageByApplyingFilter:@"CIColorMonochrome" withInputParameters:@{}];
+//    NSDictionary *options = @{};
+//    NSArray *adjustments = [ciImage autoAdjustmentFiltersWithOptions:options];
+//    CIImage *resultImage;
+//    for (CIFilter *filter in adjustments) {
+//        [filter setValue:ciImage forKey:kCIInputImageKey];
+//        resultImage = filter.outputImage;
+        [context render:resultImage toCVPixelBuffer:pixelBuf];
+//    }
+
+        memcpy(yuv_frame, y_frame, y_size);
+        memcpy(yuv_frame + y_size, uv_frame, uv_size * 2);
+        CVPixelBufferUnlockBaseAddress(pixelBuf, 0);
+        CFRelease(pixelBuf);
+    }
+*/
     [self.capture sendVideoYuvData:yuvData];
 }
 
@@ -100,19 +145,19 @@
 //    _cropFilter = [[GPUImageCropFilter alloc] initWithCropRegion:CGRectMake(((540-360) / 2.0) / 540.0, ((960-640) / 2.0) / 960.0, 360.0/540.0, 640.0 / 960.0)];
     [_videoCamera addTarget:_cropFilter];
     
-    [_cropFilter addTarget:_gpuImageView];
+//    [_cropFilter addTarget:_gpuImageView];
     
     //美颜滤镜
-//    _beautifyFilter = [[GPUImageBeautifyFilter alloc] init]; // 60% CPU
-//    [_cropFilter addTarget:_beautifyFilter];
+    _beautifyFilter = [[GPUImageBeautifyFilter alloc] init]; // 60% CPU
+    [_cropFilter addTarget:_beautifyFilter];
     
     //美颜滤镜
-//    [_beautifyFilter addTarget:_gpuImageView];
+    [_beautifyFilter addTarget:_gpuImageView];
     
     //数据处理
     _dataHandler = [[AWGPUImageAVCaptureDataHandler alloc] initWithImageSize:CGSizeMake(self.videoConfig.width, self.videoConfig.height) resultsInBGRAFormat:YES capture:self];
-    [_cropFilter addTarget:_dataHandler];
-//    [_beautifyFilter addTarget:_dataHandler];
+//    [_cropFilter addTarget:_dataHandler];
+    [_beautifyFilter addTarget:_dataHandler];
     _videoCamera.awAudioDelegate = _dataHandler;
     
     [self.videoCamera startCameraCapture];
@@ -127,6 +172,10 @@
 -(void)switchCamera{
     [self.videoCamera rotateCamera];
     [self updateFps:self.videoConfig.fps];
+}
+
+- (void)switchBeautyFace {
+
 }
 
 -(void)onStartCapture{
