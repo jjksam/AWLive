@@ -50,9 +50,9 @@ static NSString *sRtmpUrl = @"rtmp://rtmp-w.quklive.com/live/w1486371182801972";
         _captureManager.videoConfig = [[AWVideoConfig alloc] init];
         
         // 竖屏推流
-//        _captureManager.videoConfig.orientation = UIInterfaceOrientationPortrait;
+        _captureManager.videoConfig.orientation = UIInterfaceOrientationPortrait;
         // 横屏推流
-        _captureManager.videoConfig.orientation = UIInterfaceOrientationLandscapeRight;
+//        _captureManager.videoConfig.orientation = UIInterfaceOrientationLandscapeRight;
     }
     return _captureManager;
 }

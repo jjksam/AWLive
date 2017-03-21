@@ -314,7 +314,7 @@ extern void aw_rtmp_state_changed_cb_in_oc(aw_rtmp_state old_state, aw_rtmp_stat
 //        captureSessionPreset = AVCaptureSessionPreset1280x720;
 //    }
     
-    
+//    AVCaptureSessionPresetMedium : 480x360
     if (self.videoConfig.width == 240 && self.videoConfig.height == 320) {
 #if (TARGET_OS_MAC && !(TARGET_OS_EMBEDDED || TARGET_OS_IPHONE))
         captureSessionPreset = AVCaptureSessionPreset320x240; // iPhone do not support this resolution
@@ -332,7 +332,7 @@ extern void aw_rtmp_state_changed_cb_in_oc(aw_rtmp_state old_state, aw_rtmp_stat
         captureSessionPreset = AVCaptureSessionPreset1920x1080;
 #endif
     } else if (self.videoConfig.width == 360 && self.videoConfig.height == 640) {
-        captureSessionPreset = AVCaptureSessionPresetMedium;
+        captureSessionPreset = AVCaptureSessionPreset640x480;
     }
     return captureSessionPreset;
 }

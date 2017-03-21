@@ -69,6 +69,7 @@
 @property (nonatomic, strong) AWGPUImageVideoCamera *videoCamera;
 @property (nonatomic, strong) GPUImageView *gpuImageView;
 @property (nonatomic, strong) GPUImageBeautifyFilter *beautifyFilter;
+@property (nonatomic, strong) GPUImageCropFilter *cropFilter;
 @property (nonatomic, strong) AWGPUImageAVCaptureDataHandler *dataHandler;
 @end
 
@@ -95,16 +96,23 @@
     _gpuImageView = [[GPUImageView alloc] initWithFrame:self.preview.bounds];
     [self.preview addSubview:_gpuImageView];
     
-    //美颜滤镜
-    _beautifyFilter = [[GPUImageBeautifyFilter alloc] init];
-    [_videoCamera addTarget:_beautifyFilter];
+    _cropFilter = [[GPUImageCropFilter alloc] initWithCropRegion:CGRectMake(((480-360) / 2) / 480, 0, 360.0/480.0, 1.0)];
+//    _cropFilter = [[GPUImageCropFilter alloc] initWithCropRegion:CGRectMake(((540-360) / 2.0) / 540.0, ((960-640) / 2.0) / 960.0, 360.0/540.0, 640.0 / 960.0)];
+    [_videoCamera addTarget:_cropFilter];
+    
+    [_cropFilter addTarget:_gpuImageView];
     
     //美颜滤镜
-    [_beautifyFilter addTarget:_gpuImageView];
+//    _beautifyFilter = [[GPUImageBeautifyFilter alloc] init]; // 60% CPU
+//    [_cropFilter addTarget:_beautifyFilter];
+    
+    //美颜滤镜
+//    [_beautifyFilter addTarget:_gpuImageView];
     
     //数据处理
     _dataHandler = [[AWGPUImageAVCaptureDataHandler alloc] initWithImageSize:CGSizeMake(self.videoConfig.width, self.videoConfig.height) resultsInBGRAFormat:YES capture:self];
-    [_beautifyFilter addTarget:_dataHandler];
+    [_cropFilter addTarget:_dataHandler];
+//    [_beautifyFilter addTarget:_dataHandler];
     _videoCamera.awAudioDelegate = _dataHandler;
     
     [self.videoCamera startCameraCapture];

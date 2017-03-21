@@ -135,6 +135,21 @@
     return cameraSize;
 }
 
+- (CGSize)getCaptureResolution:(AVCaptureDeviceInput*)input {
+    CGSize resolution = CGSizeMake(0, 0);
+    BOOL portraitOrientation = (self.videoConfig.orientation == UIInterfaceOrientationPortrait);
+    // Get video dimensions
+    CMFormatDescriptionRef formatDescription = self.videoInputDevice.device.activeFormat.formatDescription;
+    CMVideoDimensions dimensions = CMVideoFormatDescriptionGetDimensions(formatDescription);
+    resolution = CGSizeMake((CGFloat)dimensions.width, (CGFloat)dimensions.height);
+    if (portraitOrientation) {
+        resolution = CGSizeMake((CGFloat)dimensions.height, (CGFloat)dimensions.width);
+    }
+    
+    // Return resolution
+    return resolution;
+}
+
 //创建会话
 -(void) createCaptureSession{
     self.captureSession = [AVCaptureSession new];
@@ -166,6 +181,7 @@
     
     [self.captureSession commitConfiguration];
     
+    [self getCaptureResolution:self.videoInputDevice];
     [self.captureSession startRunning];
 }
 
