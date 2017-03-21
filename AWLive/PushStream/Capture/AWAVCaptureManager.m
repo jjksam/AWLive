@@ -48,6 +48,7 @@
         //手上没有iphone4 iphone5。所以有可能下面有不支持的分辨率。
         //就需要根据手机型号来判断/自动设置支持的分辨率了。
         if(
+           !(self.videoConfig.width == 360 && self.videoConfig.height == 640) &&
            !(self.videoConfig.width == 480 && self.videoConfig.height == 640) &&
            !(self.videoConfig.width == 540 && self.videoConfig.height == 960) &&
            !(self.videoConfig.width == 720 && self.videoConfig.height == 1280)

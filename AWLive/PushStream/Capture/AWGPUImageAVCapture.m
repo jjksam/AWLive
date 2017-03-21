@@ -82,7 +82,11 @@
     //声音
     [_videoCamera addAudioInputsAndOutputs];
     //屏幕方向
-    _videoCamera.outputImageOrientation = UIInterfaceOrientationPortrait;
+    if (self.videoConfig.orientation == UIInterfaceOrientationLandscapeRight) {
+        _videoCamera.outputImageOrientation = UIInterfaceOrientationLandscapeRight;
+    } else {
+        _videoCamera.outputImageOrientation = UIInterfaceOrientationPortrait;
+    }
     //镜像策略
     _videoCamera.horizontallyMirrorRearFacingCamera = NO;
     _videoCamera.horizontallyMirrorFrontFacingCamera = YES;

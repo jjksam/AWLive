@@ -13,7 +13,7 @@
  */
 
 //请修改此地址
-static NSString *sRtmpUrl = @"rtmp://192.168.1.61:1935/live/test";
+static NSString *sRtmpUrl = @"rtmp://rtmp-w.quklive.com/live/w1486371182801972";
 
 @interface TestVideoCapture ()<AWAVCaptureDelegate>
 
@@ -41,14 +41,18 @@ static NSString *sRtmpUrl = @"rtmp://192.168.1.61:1935/live/test";
         _captureManager = [[AWAVCaptureManager alloc] init];
         
         //下面的3个类型必须设置，否则获取不到AVCapture
-        _captureManager.captureType = AWAVCaptureTypeGPUImage;
+        _captureManager.captureType = AWAVCaptureTypeGPUImage; // GPUImage过滤，iPhone 6 CPU 60%以上
+//        _captureManager.captureType = AWAVCaptureTypeSystem; // 系统视频捕获推流, iPhone 6 CPU 40%左右
         _captureManager.audioEncoderType = AWAudioEncoderTypeHWAACLC;
         _captureManager.videoEncoderType = AWVideoEncoderTypeHWH264;
+//        _captureManager.videoEncoderType = AWVideoEncoderTypeSWX264; // 软编码，停止推流会崩溃
         _captureManager.audioConfig = [[AWAudioConfig alloc] init];
         _captureManager.videoConfig = [[AWVideoConfig alloc] init];
         
-        //竖屏推流
-        _captureManager.videoConfig.orientation = UIInterfaceOrientationPortrait;
+        // 竖屏推流
+//        _captureManager.videoConfig.orientation = UIInterfaceOrientationPortrait;
+        // 横屏推流
+        _captureManager.videoConfig.orientation = UIInterfaceOrientationLandscapeRight;
     }
     return _captureManager;
 }

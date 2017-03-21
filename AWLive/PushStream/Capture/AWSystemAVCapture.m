@@ -102,12 +102,37 @@
             [conn setPreferredVideoStabilizationMode:AVCaptureVideoStabilizationModeAuto];
         }
         if (conn.isVideoOrientationSupported) {
-            [conn setVideoOrientation:AVCaptureVideoOrientationPortrait];
+            if (self.videoConfig.orientation == UIInterfaceOrientationLandscapeRight)
+                [conn setVideoOrientation:AVCaptureVideoOrientationLandscapeRight];
+            else
+                [conn setVideoOrientation:AVCaptureVideoOrientationPortrait];
         }
         if (conn.isVideoMirrored) {
             [conn setVideoMirrored: YES];
         }
     }
+}
+
+- (CGSize)cameraSizeForCameraInput:(AVCaptureDeviceInput*)input
+{
+    NSArray *ports = [input ports];
+    AVCaptureInputPort *usePort = nil;
+    for ( AVCaptureInputPort *port in ports )
+    {
+        if ( usePort == nil || [port.mediaType isEqualToString:AVMediaTypeVideo] )
+        {
+            usePort = port;
+        }
+    }
+    
+    if ( usePort == nil ) return CGSizeZero;
+    
+    CMFormatDescriptionRef format = [usePort formatDescription];
+    CMVideoDimensions dim = CMVideoFormatDescriptionGetDimensions(format);
+    
+    CGSize cameraSize = CGSizeMake(dim.width, dim.height);
+    
+    return cameraSize;
 }
 
 //创建会话

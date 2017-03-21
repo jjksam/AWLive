@@ -625,6 +625,7 @@
 				TargetAttributes = {
 					A4269D561DCE2A1B0010A4EB = {
 						CreatedOnToolsVersion = 8.1;
+						DevelopmentTeam = D6FKDNF33A;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -849,7 +850,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = D6FKDNF33A;
 				ENABLE_BITCODE = NO;
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/clibs/3th-party/libyuv/include";
 				INFOPLIST_FILE = AWLive/Info.plist;
@@ -873,7 +874,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = D6FKDNF33A;
 				ENABLE_BITCODE = NO;
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/clibs/3th-party/libyuv/include";
 				INFOPLIST_FILE = AWLive/Info.plist;

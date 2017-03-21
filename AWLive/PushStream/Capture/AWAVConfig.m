@@ -54,7 +54,9 @@
     if (self) {
         self.width = 540;
         self.height = 960;
-        self.bitrate = 1000000;
+//        self.width = 360;
+//        self.height = 640;
+        self.bitrate = 800000;
         self.fps = 20;
         self.dataFormat = X264_CSP_NV12;
     }

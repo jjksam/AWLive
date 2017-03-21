@@ -306,12 +306,33 @@ extern void aw_rtmp_state_changed_cb_in_oc(aw_rtmp_state old_state, aw_rtmp_stat
 
 -(NSString *)captureSessionPreset{
     NSString *captureSessionPreset = nil;
-    if(self.videoConfig.width == 480 && self.videoConfig.height == 640){
+//    if(self.videoConfig.width == 480 && self.videoConfig.height == 640){
+//        captureSessionPreset = AVCaptureSessionPreset640x480;
+//    }else if(self.videoConfig.width == 540 && self.videoConfig.height == 960){
+//        captureSessionPreset = AVCaptureSessionPresetiFrame960x540;
+//    }else if(self.videoConfig.width == 720 && self.videoConfig.height == 1280){
+//        captureSessionPreset = AVCaptureSessionPreset1280x720;
+//    }
+    
+    
+    if (self.videoConfig.width == 240 && self.videoConfig.height == 320) {
+#if (TARGET_OS_MAC && !(TARGET_OS_EMBEDDED || TARGET_OS_IPHONE))
+        captureSessionPreset = AVCaptureSessionPreset320x240; // iPhone do not support this resolution
+#else
+        captureSessionPreset = AVCaptureSessionPresetLow; // fallback
+#endif
+    } else if (self.videoConfig.width == 480 && self.videoConfig.height == 640) {
         captureSessionPreset = AVCaptureSessionPreset640x480;
-    }else if(self.videoConfig.width == 540 && self.videoConfig.height == 960){
-        captureSessionPreset = AVCaptureSessionPresetiFrame960x540;
-    }else if(self.videoConfig.width == 720 && self.videoConfig.height == 1280){
+    } else if (self.videoConfig.width == 540 && self.videoConfig.height == 960) {
+        captureSessionPreset = AVCaptureSessionPresetiFrame960x540; // iPhone do not support this resolution
+    } else if (self.videoConfig.width == 720 && self.videoConfig.height == 1280) {
         captureSessionPreset = AVCaptureSessionPreset1280x720;
+    } else if (self.videoConfig.width == 1080 && self.videoConfig.height == 1920) {
+#if TARGET_OS_IPHONE
+        captureSessionPreset = AVCaptureSessionPreset1920x1080;
+#endif
+    } else if (self.videoConfig.width == 360 && self.videoConfig.height == 640) {
+        captureSessionPreset = AVCaptureSessionPresetMedium;
     }
     return captureSessionPreset;
 }
