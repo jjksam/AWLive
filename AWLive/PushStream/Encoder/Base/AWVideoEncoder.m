@@ -10,18 +10,19 @@
 @implementation AWVideoEncoder
 
 -(NSData *)rotateNV12Data:(NSData *)nv12Data{
+    /*
     int degree = 0;
-//    switch (self.videoConfig.orientation) {
-//        case UIInterfaceOrientationLandscapeLeft:
-//            degree = 90;
-//            break;
-//        case UIInterfaceOrientationLandscapeRight:
-//            degree = 270;
-//            break;
-//        default:
-//            //do nothing
-//            break;
-//    }
+    switch (self.videoConfig.orientation) {
+        case UIInterfaceOrientationLandscapeLeft:
+            degree = 90;
+            break;
+        case UIInterfaceOrientationLandscapeRight:
+            degree = 270;
+            break;
+        default:
+            //do nothing
+            break;
+    }
     if (degree != 0) {
         uint8_t *src_nv12_bytes = (uint8_t *)nv12Data.bytes;
         uint32_t width = (uint32_t)self.videoConfig.width;
@@ -45,7 +46,7 @@
 
         aw_free(rotatedI420Bytes);
     }
-    
+    */
     return nv12Data;
 }
 
