@@ -140,16 +140,24 @@
     //预览 view
     _gpuImageView = [[GPUImageView alloc] initWithFrame:self.preview.bounds];
     [self.preview addSubview:_gpuImageView];
-    
-    _cropFilter = [[GPUImageCropFilter alloc] initWithCropRegion:CGRectMake(((480-360) / 2) / 480, 0, 360.0/480.0, 1.0)];
-//    _cropFilter = [[GPUImageCropFilter alloc] initWithCropRegion:CGRectMake(((540-360) / 2.0) / 540.0, ((960-640) / 2.0) / 960.0, 360.0/540.0, 640.0 / 960.0)];
-    [_videoCamera addTarget:_cropFilter];
-    
+    if (self.videoConfig.width == 360 && self.videoConfig.height == 640) {
+        if (self.videoConfig.orientation == UIInterfaceOrientationPortrait) {
+            _cropFilter = [[GPUImageCropFilter alloc] initWithCropRegion:CGRectMake(((480-360) / 2) / 480, 0, 360.0/480.0, 1.0)];
+        } else {
+            _cropFilter = [[GPUImageCropFilter alloc] initWithCropRegion:CGRectMake(0, ((480-360) / 2) / 480, 1.0, 360.0/480.0)];
+        }
+        [_videoCamera addTarget:_cropFilter];
+    }
 //    [_cropFilter addTarget:_gpuImageView];
     
     //美颜滤镜
     _beautifyFilter = [[GPUImageBeautifyFilter alloc] init]; // 60% CPU
-    [_cropFilter addTarget:_beautifyFilter];
+    
+    if (self.videoConfig.width == 360 && self.videoConfig.height == 640) {
+        [_cropFilter addTarget:_beautifyFilter];
+    } else {
+        [_videoCamera addTarget:_beautifyFilter];
+    }
     
     //美颜滤镜
     [_beautifyFilter addTarget:_gpuImageView];

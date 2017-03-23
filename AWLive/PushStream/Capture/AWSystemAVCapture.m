@@ -47,7 +47,7 @@
     [self createCaptureDevice];
     [self createOutput];
     [self createCaptureSession];
-    [self createPreviewLayer];
+
     
     //更新fps
     [self updateFps: self.videoConfig.fps];
@@ -89,18 +89,27 @@
     _videoInputDevice = videoInputDevice;
 }
 
+- (void)setPreview:(UIView *)preview {
+    [super setPreview:preview];
+    [self createPreviewLayer];
+}
+
 //创建预览
 -(void) createPreviewLayer{
+    if (self.previewLayer) {
+        [self.previewLayer removeFromSuperlayer];
+    }
     self.previewLayer = [AVCaptureVideoPreviewLayer layerWithSession:self.captureSession];
+    self.previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
     self.previewLayer.frame = self.preview.bounds;
     [self.preview.layer addSublayer:self.previewLayer];
 }
 
 -(void) setVideoOutConfig{
     for (AVCaptureConnection *conn in self.videoDataOutput.connections) {
-        if (conn.isVideoStabilizationSupported) {
-            [conn setPreferredVideoStabilizationMode:AVCaptureVideoStabilizationModeAuto];
-        }
+//        if (conn.isVideoStabilizationSupported) {
+//            [conn setPreferredVideoStabilizationMode:AVCaptureVideoStabilizationModeAuto];
+//        }
         if (conn.isVideoOrientationSupported) {
             if (self.videoConfig.orientation == UIInterfaceOrientationLandscapeRight)
                 [conn setVideoOrientation:AVCaptureVideoOrientationLandscapeRight];

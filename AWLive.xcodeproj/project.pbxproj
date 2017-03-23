@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		002C825B1E812B9000BC8C7F /* LandscapeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 002C825A1E812B9000BC8C7F /* LandscapeViewController.m */; };
+		005A71FC1E8210C800A21B64 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 005A71EF1E8210C700A21B64 /* LICENSE */; };
+		005A71FD1E8210C800A21B64 /* ALView+PureLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 005A71F31E8210C700A21B64 /* ALView+PureLayout.m */; };
+		005A71FE1E8210C800A21B64 /* NSArray+PureLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 005A71F51E8210C700A21B64 /* NSArray+PureLayout.m */; };
+		005A71FF1E8210C800A21B64 /* NSLayoutConstraint+PureLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 005A71F71E8210C700A21B64 /* NSLayoutConstraint+PureLayout.m */; };
+		005A72001E8210C800A21B64 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 005A71FB1E8210C800A21B64 /* README.md */; };
 		A4269D5C1DCE2A1B0010A4EB /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A4269D5B1DCE2A1B0010A4EB /* main.m */; };
 		A4269D5F1DCE2A1B0010A4EB /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A4269D5E1DCE2A1B0010A4EB /* AppDelegate.m */; };
 		A4269D621DCE2A1B0010A4EB /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4269D611DCE2A1B0010A4EB /* ViewController.m */; };
@@ -89,6 +95,19 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		002C82591E812B9000BC8C7F /* LandscapeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LandscapeViewController.h; sourceTree = "<group>"; };
+		002C825A1E812B9000BC8C7F /* LandscapeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LandscapeViewController.m; sourceTree = "<group>"; };
+		005A71EF1E8210C700A21B64 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		005A71F21E8210C700A21B64 /* ALView+PureLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ALView+PureLayout.h"; sourceTree = "<group>"; };
+		005A71F31E8210C700A21B64 /* ALView+PureLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ALView+PureLayout.m"; sourceTree = "<group>"; };
+		005A71F41E8210C700A21B64 /* NSArray+PureLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+PureLayout.h"; sourceTree = "<group>"; };
+		005A71F51E8210C700A21B64 /* NSArray+PureLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+PureLayout.m"; sourceTree = "<group>"; };
+		005A71F61E8210C700A21B64 /* NSLayoutConstraint+PureLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSLayoutConstraint+PureLayout.h"; sourceTree = "<group>"; };
+		005A71F71E8210C700A21B64 /* NSLayoutConstraint+PureLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSLayoutConstraint+PureLayout.m"; sourceTree = "<group>"; };
+		005A71F81E8210C700A21B64 /* PureLayout+Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PureLayout+Internal.h"; sourceTree = "<group>"; };
+		005A71F91E8210C700A21B64 /* PureLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PureLayout.h; sourceTree = "<group>"; };
+		005A71FA1E8210C700A21B64 /* PureLayoutDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PureLayoutDefines.h; sourceTree = "<group>"; };
+		005A71FB1E8210C800A21B64 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		A4269D571DCE2A1B0010A4EB /* AWLive.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AWLive.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A4269D5B1DCE2A1B0010A4EB /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		A4269D5D1DCE2A1B0010A4EB /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -210,6 +229,40 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		005A71EE1E8210C700A21B64 /* PureLayout */ = {
+			isa = PBXGroup;
+			children = (
+				005A71EF1E8210C700A21B64 /* LICENSE */,
+				005A71F01E8210C700A21B64 /* PureLayout */,
+				005A71FB1E8210C800A21B64 /* README.md */,
+			);
+			path = PureLayout;
+			sourceTree = "<group>";
+		};
+		005A71F01E8210C700A21B64 /* PureLayout */ = {
+			isa = PBXGroup;
+			children = (
+				005A71F11E8210C700A21B64 /* PureLayout */,
+			);
+			path = PureLayout;
+			sourceTree = "<group>";
+		};
+		005A71F11E8210C700A21B64 /* PureLayout */ = {
+			isa = PBXGroup;
+			children = (
+				005A71F21E8210C700A21B64 /* ALView+PureLayout.h */,
+				005A71F31E8210C700A21B64 /* ALView+PureLayout.m */,
+				005A71F41E8210C700A21B64 /* NSArray+PureLayout.h */,
+				005A71F51E8210C700A21B64 /* NSArray+PureLayout.m */,
+				005A71F61E8210C700A21B64 /* NSLayoutConstraint+PureLayout.h */,
+				005A71F71E8210C700A21B64 /* NSLayoutConstraint+PureLayout.m */,
+				005A71F81E8210C700A21B64 /* PureLayout+Internal.h */,
+				005A71F91E8210C700A21B64 /* PureLayout.h */,
+				005A71FA1E8210C700A21B64 /* PureLayoutDefines.h */,
+			);
+			path = PureLayout;
+			sourceTree = "<group>";
+		};
 		A4269D4E1DCE2A1B0010A4EB = {
 			isa = PBXGroup;
 			children = (
@@ -231,6 +284,7 @@
 		A4269D591DCE2A1B0010A4EB /* AWLive */ = {
 			isa = PBXGroup;
 			children = (
+				005A71EE1E8210C700A21B64 /* PureLayout */,
 				A461BE371DE826BE00F18219 /* Resources */,
 				A4269D711DCE2A390010A4EB /* PushStream */,
 				A4269D941DCE2A390010A4EB /* Test */,
@@ -238,6 +292,8 @@
 				A4269D5E1DCE2A1B0010A4EB /* AppDelegate.m */,
 				A4269D601DCE2A1B0010A4EB /* ViewController.h */,
 				A4269D611DCE2A1B0010A4EB /* ViewController.m */,
+				002C82591E812B9000BC8C7F /* LandscapeViewController.h */,
+				002C825A1E812B9000BC8C7F /* LandscapeViewController.m */,
 				A4269D631DCE2A1B0010A4EB /* Main.storyboard */,
 				A4269D661DCE2A1B0010A4EB /* Assets.xcassets */,
 				A4269D681DCE2A1B0010A4EB /* LaunchScreen.storyboard */,
@@ -680,6 +736,7 @@
 				A461BE391DE826D500F18219 /* camera_switch.png in Resources */,
 				A4269D671DCE2A1B0010A4EB /* Assets.xcassets in Resources */,
 				A4269D651DCE2A1B0010A4EB /* Main.storyboard in Resources */,
+				005A71FC1E8210C800A21B64 /* LICENSE in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -697,6 +754,7 @@
 				A4269F7F1DCE2A8E0010A4EB /* aw_rtmp.c in Sources */,
 				A4269D621DCE2A1B0010A4EB /* ViewController.m in Sources */,
 				A4269F841DCE2A8E0010A4EB /* aw_x264.c in Sources */,
+				005A71FD1E8210C800A21B64 /* ALView+PureLayout.m in Sources */,
 				A4269F7A1DCE2A8E0010A4EB /* aw_alloc.c in Sources */,
 				A4269D5F1DCE2A1B0010A4EB /* AppDelegate.m in Sources */,
 				A4269F831DCE2A8E0010A4EB /* aw_sw_x264_encoder.c in Sources */,
@@ -706,15 +764,19 @@
 				A426A0621DCF71660010A4EB /* AWAVCaptureManager.m in Sources */,
 				A4269F801DCE2A8E0010A4EB /* aw_thread_poll.c in Sources */,
 				A4269DA01DCE2A390010A4EB /* AWHWH264Encoder.m in Sources */,
+				002C825B1E812B9000BC8C7F /* LandscapeViewController.m in Sources */,
 				A4269D971DCE2A390010A4EB /* AWAVCapture.m in Sources */,
 				A4269D9E1DCE2A390010A4EB /* AWVideoEncoder.m in Sources */,
 				A4269D991DCE2A390010A4EB /* AWGPUImageAVCapture.m in Sources */,
 				A4269DA41DCE2A390010A4EB /* GPUImageBeautifyFilter.m in Sources */,
 				A4269DA51DCE2A390010A4EB /* TestAVCapture.m in Sources */,
+				005A71FF1E8210C800A21B64 /* NSLayoutConstraint+PureLayout.m in Sources */,
 				A4269D9D1DCE2A390010A4EB /* AWEncoder.m in Sources */,
+				005A71FE1E8210C800A21B64 /* NSArray+PureLayout.m in Sources */,
 				A4269DA31DCE2A390010A4EB /* AWGPUImageVideoCamera.m in Sources */,
 				A4269D9C1DCE2A390010A4EB /* AWAudioEncoder.m in Sources */,
 				A4269DA21DCE2A390010A4EB /* AWSWX264Encoder.m in Sources */,
+				005A72001E8210C800A21B64 /* README.md in Sources */,
 				A4269DA11DCE2A390010A4EB /* AWSWFaacEncoder.m in Sources */,
 				A4269F861DCE2A8E0010A4EB /* aw_streamer.c in Sources */,
 				A4269D981DCE2A390010A4EB /* AWAVConfig.m in Sources */,

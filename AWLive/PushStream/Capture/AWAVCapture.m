@@ -33,6 +33,10 @@ extern void aw_rtmp_state_changed_cb_in_oc(aw_rtmp_state old_state, aw_rtmp_stat
 
 @implementation AWAVCapture
 
+- (void)setPreview:(UIView *)preview {
+    _preview = preview;
+}
+
 -(dispatch_queue_t)encodeSampleQueue{
     if (!_encodeSampleQueue) {
         _encodeSampleQueue = dispatch_queue_create("aw.encodesample.queue", DISPATCH_QUEUE_SERIAL);
@@ -162,13 +166,22 @@ extern void aw_rtmp_state_changed_cb_in_oc(aw_rtmp_state old_state, aw_rtmp_stat
     _isCapturing = isCapturing;
 }
 
--(UIView *)preview{
-    if (!_preview) {
-        _preview = [UIView new];
-        _preview.bounds = [UIScreen mainScreen].bounds;
-    }
-    return _preview;
-}
+//-(UIView *)preview{
+//    if (!_preview) {
+//        _preview = [UIView new];
+//        if (self.videoConfig.orientation == UIInterfaceOrientationPortrait) {
+//            _preview.bounds = [UIScreen mainScreen].bounds;
+//        } else {
+//            CGRect bounds = [UIScreen mainScreen].bounds;
+//            CGFloat height = bounds.size.height;
+//            CGFloat width = bounds.size.width;
+//            bounds.size.height = width;
+//            bounds.size.width = height;
+//            _preview.bounds = bounds;
+//        }
+//    }
+//    return _preview;
+//}
 
 //发送数据
 -(void) sendVideoSampleBuffer:(CMSampleBufferRef) sampleBuffer toEncodeQueue:(dispatch_queue_t) encodeQueue toSendQueue:(dispatch_queue_t) sendQueue{

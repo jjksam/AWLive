@@ -37,14 +37,16 @@ extern void aw_rtmp_state_changed_cb_in_oc(aw_rtmp_state old_state, aw_rtmp_stat
 //发送数据队列
 @property (nonatomic, readonly, strong) dispatch_queue_t sendSampleQueue;
 
+//预览view
+@property (nonatomic, strong) UIView *preview;
+
 //状态变化回调
 @property (nonatomic, weak) id<AWAVCaptureDelegate> stateDelegate;
 
 //是否将数据发送出去
 @property (nonatomic, unsafe_unretained) BOOL isCapturing;
 
-//预览view
-@property (nonatomic, strong) UIView *preview;
+
 
 //根据videoConfig获取当前CaptureSession preset分辨率
 @property (nonatomic, readonly, copy) NSString *captureSessionPreset;

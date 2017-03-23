@@ -7,6 +7,8 @@
 #import "TestAVCapture.h"
 
 #import "AWAVCaptureManager.h"
+#import "LandscapeViewController.h"
+#import "PureLayout.h"
 
 /*
  测试代码
@@ -27,7 +29,7 @@ static NSString *sRtmpUrl = @"rtmp://rtmp-w.quklive.com/live/w1486371182801972";
 //预览
 @property (nonatomic, strong) UIView *preview;
 
-@property (nonatomic, weak) ViewController *viewController;
+@property (nonatomic, weak) LandscapeViewController *viewController;
 
 @property (nonatomic, strong) AWAVCaptureManager *captureManager;
 
@@ -41,8 +43,8 @@ static NSString *sRtmpUrl = @"rtmp://rtmp-w.quklive.com/live/w1486371182801972";
         _captureManager = [[AWAVCaptureManager alloc] init];
         
         //下面的3个类型必须设置，否则获取不到AVCapture
-        _captureManager.captureType = AWAVCaptureTypeGPUImage; // GPUImage过滤，iPhone 6 CPU 60%以上
-//        _captureManager.captureType = AWAVCaptureTypeSystem; // 系统视频捕获推流, iPhone 6 CPU 40%左右
+//        _captureManager.captureType = AWAVCaptureTypeGPUImage; // GPUImage过滤，iPhone 6 CPU 60%以上
+        _captureManager.captureType = AWAVCaptureTypeSystem; // 系统视频捕获推流, iPhone 6 CPU 40%左右
         _captureManager.audioEncoderType = AWAudioEncoderTypeHWAACLC;
         _captureManager.videoEncoderType = AWVideoEncoderTypeHWH264;
 //        _captureManager.videoEncoderType = AWVideoEncoderTypeSWX264; // 软编码，停止推流会崩溃
@@ -50,47 +52,39 @@ static NSString *sRtmpUrl = @"rtmp://rtmp-w.quklive.com/live/w1486371182801972";
         _captureManager.videoConfig = [[AWVideoConfig alloc] init];
         
         // 竖屏推流
-        _captureManager.videoConfig.orientation = UIInterfaceOrientationPortrait;
+//        _captureManager.videoConfig.orientation = UIInterfaceOrientationPortrait;
         // 横屏推流
-//        _captureManager.videoConfig.orientation = UIInterfaceOrientationLandscapeRight;
+        _captureManager.videoConfig.orientation = UIInterfaceOrientationLandscapeRight;
     }
     return _captureManager;
 }
 
--(AWAVCapture *)avCapture{
+- (AWAVCapture *)avCapture {
     AWAVCapture *capture = self.captureManager.avCapture;
     capture.stateDelegate = self;
     return capture;
 }
 
--(UIView *)preview{
-    if (!_preview) {
-        _preview = [UIView new];
-        _preview.frame = self.viewController.view.bounds;
-        [self.viewController.view addSubview:_preview];
-        [self.viewController.view sendSubviewToBack:_preview];
-    }
-    return _preview;
-}
-
 #pragma mark 初始化
--(instancetype) initWithViewController:(ViewController *)viewCtl{
+-(instancetype) initWithViewController:(UIViewController *)viewCtl{
     if (self = [super init]) {
-        self.viewController = viewCtl;
+        self.viewController = (LandscapeViewController *)viewCtl;
         [self createUI];
     }
     return self;
 }
 
--(void) createUI{
-    [self.preview addSubview: self.avCapture.preview];
-    self.avCapture.preview.center = self.preview.center;
+- (void)createUI {
+
+    [self.avCapture setPreview:self.viewController.preview];
     
-    self.stateLabel = [[UILabel alloc] init];
+//    self.avCapture.preview.center = self.viewController.preview.center;
+    
+    self.stateLabel = [[UILabel alloc] initForAutoLayout];
     self.stateText = @"未连接";
     [self.viewController.view addSubview:self.stateLabel];
     
-    self.startBtn = [[UIButton alloc] init];
+    self.startBtn = [[UIButton alloc] initForAutoLayout];
     [self.startBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self.startBtn setTitleColor:[UIColor grayColor] forState:UIControlStateHighlighted];
     self.startBtn.backgroundColor = [UIColor blackColor];
@@ -102,7 +96,7 @@ static NSString *sRtmpUrl = @"rtmp://rtmp-w.quklive.com/live/w1486371182801972";
     self.startBtn.layer.borderColor = [[UIColor colorWithRed:0.2 green:0.2 blue:0.2 alpha:1] CGColor];
     self.startBtn.layer.cornerRadius = 5;
     
-    self.switchBtn = [[UIButton alloc] init];
+    self.switchBtn = [[UIButton alloc] initForAutoLayout];
     UIImage *switchImage = [self imageWithPath:@"camera_switch.png" scale:2];
     switchImage = [switchImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     [self.switchBtn setImage:switchImage forState:UIControlStateNormal];
@@ -110,7 +104,7 @@ static NSString *sRtmpUrl = @"rtmp://rtmp-w.quklive.com/live/w1486371182801972";
     [self.switchBtn addTarget:self action:@selector(onSwitchClick) forControlEvents:UIControlEventTouchUpInside];
     [self.viewController.view addSubview:self.switchBtn];
     
-    UIButton *beautyFace = [[UIButton alloc] init];
+    UIButton *beautyFace = [[UIButton alloc] initForAutoLayout];
     [beautyFace setTitle:@"美颜" forState:UIControlStateNormal];
     [beautyFace setTintColor:[UIColor whiteColor]];
     [beautyFace addTarget:self action:@selector(onBeautyFace) forControlEvents:UIControlEventTouchUpInside];
@@ -121,7 +115,7 @@ static NSString *sRtmpUrl = @"rtmp://rtmp-w.quklive.com/live/w1486371182801972";
 
 }
 
--(UIImage *)imageWithPath:(NSString *)path scale:(CGFloat)scale{
+- (UIImage *)imageWithPath:(NSString *)path scale:(CGFloat)scale {
     NSString *imagePath = [[NSBundle mainBundle] pathForResource:path ofType:nil];
     if (imagePath) {
         NSData *imgData = [NSData dataWithContentsOfFile:imagePath];
@@ -134,17 +128,28 @@ static NSString *sRtmpUrl = @"rtmp://rtmp-w.quklive.com/live/w1486371182801972";
     return nil;
 }
 
--(void) onLayout{
+- (void)onLayout {
     CGSize screenSize = [UIScreen mainScreen].bounds.size;
+    [self.stateLabel autoPinEdgeToSuperviewEdge:ALEdgeTop withInset:90];
+    [self.stateLabel autoPinEdgeToSuperviewEdge:ALEdgeLeading withInset:30];
     
-    self.stateLabel.frame = CGRectMake(30, 130, 100, 30);
+//    self.stateLabel.frame = CGRectMake(30, 130, 100, 30);
+    [self.startBtn autoSetDimensionsToSize:CGSizeMake(screenSize.width - 80, 40)];
+    [self.startBtn autoPinEdgeToSuperviewEdge:ALEdgeBottom withInset:30];
+    [self.startBtn autoAlignAxisToSuperviewAxis:ALAxisVertical];
     
-    self.startBtn.frame = CGRectMake(40, screenSize.height - 150 - 40, screenSize.width - 80, 40);
+//    self.startBtn.frame = CGRectMake(40, screenSize.height - 150 - 40, screenSize.width - 80, 40);
     
-    self.switchBtn.frame = CGRectMake(screenSize.width - 30 - self.switchBtn.currentImage.size.width, 130, self.switchBtn.currentImage.size.width, self.switchBtn.currentImage.size.height);
+    [self.switchBtn autoSetDimensionsToSize:CGSizeMake(self.switchBtn.currentImage.size.width, self.switchBtn.currentImage.size.width)];
+    [self.switchBtn autoPinEdgeToSuperviewEdge:ALEdgeTop withInset:90];
+    [self.switchBtn autoPinEdgeToSuperviewEdge:ALEdgeTrailing withInset:30];
+    
+//    self.switchBtn.frame = CGRectMake(screenSize.width - 30 - self.switchBtn.currentImage.size.width, 130, self.switchBtn.currentImage.size.width, self.switchBtn.currentImage.size.width);
     
     self.preview.frame = self.viewController.view.bounds;
+    self.preview.layer.frame = self.preview.frame;
     self.avCapture.preview.frame = self.preview.bounds;
+    self.avCapture.preview.layer.frame = self.preview.frame;
 }
 
 -(void) setStateText:(NSString *)stateText{

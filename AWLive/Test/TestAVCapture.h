@@ -9,7 +9,7 @@
 
 @interface TestVideoCapture : NSObject
 
--(instancetype) initWithViewController:(ViewController *)viewCtl;
+-(instancetype) initWithViewController:(UIViewController *)viewCtl;
 
 -(void) onLayout;
 @end
