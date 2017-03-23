@@ -16,27 +16,36 @@
 
 @implementation LandscapeViewController
 
-- (UIView *)preview {
-    if (!_preview) {
-        _preview = [UIView new];
-        [self.view addSubview:_preview];
-        [self.view sendSubviewToBack:_preview];
-        [_preview autoPinEdgesToSuperviewEdges];
-        [UIView animateWithDuration:0.1 animations:^{
-            [_preview layoutIfNeeded];
-        }];
-        
-        [self.view layoutIfNeeded];
-        [_preview setTransform:CGAffineTransformRotate(CGAffineTransformIdentity, -M_PI_2)];
-        _preview.transform = CGAffineTransformTranslate(_preview.transform, 90+55, -90-55);
-
-    }
-    return _preview;
+//- (UIView *)preview {
+//    if (!_preview) {
+//        _preview = [UIView new];
+//        [self.view addSubview:_preview];
+//        [self.view sendSubviewToBack:_preview];
+//        [_preview autoPinEdgesToSuperviewEdges];
+//        [_preview layoutIfNeeded];
+//        [UIView animateWithDuration:0.1 animations:^{
+//            
+//        }];
+//        
+////        CGFloat dx = [UIScreen mainScreen].bounds.size.height / 2 - [UIScreen mainScreen].bounds.size.width / 2;
+////        CGFloat dy = [UIScreen mainScreen].bounds.size.height / 2 - [UIScreen mainScreen].bounds.size.width / 2;
+////        CGAffineTransform transform = CGAffineTransformMakeTranslation(-dx, -dy);
+////        _preview.transform = CGAffineTransformRotate(transform, -M_PI_2);
+//    }
+//    return _preview;
+//}
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    _preview = [UIView new];
+    [self.view addSubview:_preview];
+    [self.view sendSubviewToBack:_preview];
+    [_preview autoPinEdgesToSuperviewEdges];
+    [_preview layoutIfNeeded];
     self.testVideoCapture = [[TestVideoCapture alloc] initWithViewController:self];
     
 }

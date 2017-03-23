@@ -121,22 +121,12 @@
 @implementation AWGPUImageAVCapture
 
 #pragma mark 懒加载
+- (void)setPreview:(UIView *)preview {
+    [super setPreview:preview];
+    [self setup];
+}
 
--(void)onInit{
-    //摄像头
-    _videoCamera = [[AWGPUImageVideoCamera alloc] initWithSessionPreset:self.captureSessionPreset cameraPosition:AVCaptureDevicePositionFront];
-    //声音
-    [_videoCamera addAudioInputsAndOutputs];
-    //屏幕方向
-    if (self.videoConfig.orientation == UIInterfaceOrientationLandscapeRight) {
-        _videoCamera.outputImageOrientation = UIInterfaceOrientationLandscapeRight;
-    } else {
-        _videoCamera.outputImageOrientation = UIInterfaceOrientationPortrait;
-    }
-    //镜像策略
-    _videoCamera.horizontallyMirrorRearFacingCamera = NO;
-    _videoCamera.horizontallyMirrorFrontFacingCamera = YES;
-    
+- (void)setup {
     //预览 view
     _gpuImageView = [[GPUImageView alloc] initWithFrame:self.preview.bounds];
     [self.preview addSubview:_gpuImageView];
@@ -148,7 +138,7 @@
         }
         [_videoCamera addTarget:_cropFilter];
     }
-//    [_cropFilter addTarget:_gpuImageView];
+    //    [_cropFilter addTarget:_gpuImageView];
     
     //美颜滤镜
     _beautifyFilter = [[GPUImageBeautifyFilter alloc] init]; // 60% CPU
@@ -164,13 +154,29 @@
     
     //数据处理
     _dataHandler = [[AWGPUImageAVCaptureDataHandler alloc] initWithImageSize:CGSizeMake(self.videoConfig.width, self.videoConfig.height) resultsInBGRAFormat:YES capture:self];
-//    [_cropFilter addTarget:_dataHandler];
+    //    [_cropFilter addTarget:_dataHandler];
     [_beautifyFilter addTarget:_dataHandler];
     _videoCamera.awAudioDelegate = _dataHandler;
     
     [self.videoCamera startCameraCapture];
     
     [self updateFps:self.videoConfig.fps];
+}
+
+-(void)onInit{
+    //摄像头
+    _videoCamera = [[AWGPUImageVideoCamera alloc] initWithSessionPreset:self.captureSessionPreset cameraPosition:AVCaptureDevicePositionFront];
+    //声音
+    [_videoCamera addAudioInputsAndOutputs];
+    //屏幕方向
+    if (self.videoConfig.orientation == UIInterfaceOrientationLandscapeRight) {
+        _videoCamera.outputImageOrientation = UIInterfaceOrientationLandscapeRight;
+    } else {
+        _videoCamera.outputImageOrientation = UIInterfaceOrientationPortrait;
+    }
+    //镜像策略
+    _videoCamera.horizontallyMirrorRearFacingCamera = NO;
+    _videoCamera.horizontallyMirrorFrontFacingCamera = YES;
 }
 
 -(BOOL)startCaptureWithRtmpUrl:(NSString *)rtmpUrl{

@@ -145,11 +145,6 @@ static NSString *sRtmpUrl = @"rtmp://rtmp-w.quklive.com/live/w1486371182801972";
     [self.switchBtn autoPinEdgeToSuperviewEdge:ALEdgeTrailing withInset:30];
     
 //    self.switchBtn.frame = CGRectMake(screenSize.width - 30 - self.switchBtn.currentImage.size.width, 130, self.switchBtn.currentImage.size.width, self.switchBtn.currentImage.size.width);
-    
-    self.preview.frame = self.viewController.view.bounds;
-    self.preview.layer.frame = self.preview.frame;
-    self.avCapture.preview.frame = self.preview.bounds;
-    self.avCapture.preview.layer.frame = self.preview.frame;
 }
 
 -(void) setStateText:(NSString *)stateText{
