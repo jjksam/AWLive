@@ -75,17 +75,17 @@
         //图像高度（像素）
         size_t pixelHeight = CVPixelBufferGetHeight(pixelBuffer);
         //yuv中的y所占字节数
-        size_t y_size = pixelWidth * pixelHeight;
+        size_t y_size = aw_stride(pixelWidth) * pixelHeight;
         //yuv中的u和v分别所占的字节数
         size_t uv_size = y_size / 4;
         
         uint8_t *yuv_frame = aw_alloc(uv_size * 2 + y_size);
         
-        bool isPlanar = CVPixelBufferIsPlanar(pixelBuffer);
-        if (isPlanar) {
-            size_t planeCount = CVPixelBufferGetPlaneCount(pixelBuffer);
+//        bool isPlanar = CVPixelBufferIsPlanar(pixelBuffer);
+//        if (isPlanar) {
+//            size_t planeCount = CVPixelBufferGetPlaneCount(pixelBuffer);
 //            NSLog(@"=== planeCount : %ld \n ",planeCount);
-        }
+//        }
         
         //获取CVImageBufferRef中的y数据
         uint8_t *y_frame = CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 0);
