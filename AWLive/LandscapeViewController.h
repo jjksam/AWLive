@@ -11,5 +11,6 @@
 @interface LandscapeViewController : UIViewController
 
 @property (nonatomic, strong) UIView *preview;
+@property (assign) UIInterfaceOrientation orientation;
 
 @end

@@ -47,10 +47,14 @@
 
 - (void)landscapePush {
     self.vc = [LandscapeViewController new];
+    self.vc.orientation = UIInterfaceOrientationLandscapeRight;
     [self presentViewController:self.vc animated:YES completion:nil];
 }
 
 - (void)portraitPush {
+    self.vc = [LandscapeViewController new];
+    self.vc.orientation = UIInterfaceOrientationPortrait;
+    [self presentViewController:self.vc animated:YES completion:nil];
     
 }
 

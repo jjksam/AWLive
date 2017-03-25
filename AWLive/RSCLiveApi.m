@@ -12,6 +12,7 @@
 
 @property (nonatomic, strong) AWAVCaptureManager *captureManager;
 @property (nonatomic, strong) UIView *preview;
+@property (nonatomic, strong) RSCAVConfig *avConfig;
 
 @end
 
@@ -26,19 +27,19 @@
     if (!_captureManager) {
         _captureManager = [[AWAVCaptureManager alloc] init];
         
-        //下面的3个类型必须设置，否则获取不到AVCapture
-        //        _captureManager.captureType = AWAVCaptureTypeGPUImage; // GPUImage过滤，iPhone 6 CPU 60%以上
+//下面的3个类型必须设置，否则获取不到AVCapture
+//        _captureManager.captureType = AWAVCaptureTypeGPUImage; // GPUImage过滤，iPhone 6 CPU 60%以上
         _captureManager.captureType = AWAVCaptureTypeSystem; // 系统视频捕获推流, iPhone 6 CPU 40%左右
         _captureManager.audioEncoderType = AWAudioEncoderTypeHWAACLC;
         _captureManager.videoEncoderType = AWVideoEncoderTypeHWH264;
-        //        _captureManager.videoEncoderType = AWVideoEncoderTypeSWX264; // 软编码，停止推流会崩溃
+//      _captureManager.videoEncoderType = AWVideoEncoderTypeSWX264; // 软编码，停止推流会崩溃
         _captureManager.audioConfig = [[AWAudioConfig alloc] init];
         _captureManager.videoConfig = [[AWVideoConfig alloc] init];
         
         // 竖屏推流
-        //        _captureManager.videoConfig.orientation = UIInterfaceOrientationPortrait;
+        _captureManager.videoConfig.orientation = self.appOrientation;
         // 横屏推流
-        _captureManager.videoConfig.orientation = UIInterfaceOrientationLandscapeRight;
+//        _captureManager.videoConfig.orientation = UIInterfaceOrientationLandscapeRight;
     }
     return _captureManager;
 }

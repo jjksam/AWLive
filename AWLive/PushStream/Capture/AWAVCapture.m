@@ -166,23 +166,6 @@ extern void aw_rtmp_state_changed_cb_in_oc(aw_rtmp_state old_state, aw_rtmp_stat
     _isCapturing = isCapturing;
 }
 
-//-(UIView *)preview{
-//    if (!_preview) {
-//        _preview = [UIView new];
-//        if (self.videoConfig.orientation == UIInterfaceOrientationPortrait) {
-//            _preview.bounds = [UIScreen mainScreen].bounds;
-//        } else {
-//            CGRect bounds = [UIScreen mainScreen].bounds;
-//            CGFloat height = bounds.size.height;
-//            CGFloat width = bounds.size.width;
-//            bounds.size.height = width;
-//            bounds.size.width = height;
-//            _preview.bounds = bounds;
-//        }
-//    }
-//    return _preview;
-//}
-
 //发送数据
 -(void) sendVideoSampleBuffer:(CMSampleBufferRef) sampleBuffer toEncodeQueue:(dispatch_queue_t) encodeQueue toSendQueue:(dispatch_queue_t) sendQueue{
     if (_inBackground) {
@@ -337,7 +320,7 @@ extern void aw_rtmp_state_changed_cb_in_oc(aw_rtmp_state old_state, aw_rtmp_stat
     } else if (self.videoConfig.width == 480 && self.videoConfig.height == 640) {
         captureSessionPreset = AVCaptureSessionPreset640x480;
     } else if (self.videoConfig.width == 540 && self.videoConfig.height == 960) {
-        captureSessionPreset = AVCaptureSessionPresetiFrame960x540; // iPhone do not support this resolution
+        captureSessionPreset = AVCaptureSessionPresetiFrame960x540;
     } else if (self.videoConfig.width == 720 && self.videoConfig.height == 1280) {
         captureSessionPreset = AVCaptureSessionPreset1280x720;
     } else if (self.videoConfig.width == 1080 && self.videoConfig.height == 1920) {

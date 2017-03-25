@@ -39,6 +39,8 @@ typedef enum {
 
 @interface RSCLiveApi : NSObject
 
+@property (assign) UIInterfaceOrientation appOrientation;
+
 + (NSString *)version;
 /// \brief 调试信息开关
 /// \desc 建议在调试阶段打开此开关，方便调试。默认关闭
@@ -90,7 +92,7 @@ typedef enum {
 #if TARGET_OS_IPHONE
 /// \brief 设置手机姿势，用于校正主播输出视频朝向
 /// \param orientation 手机姿势
-- (bool)setAppOrientation:(UIInterfaceOrientation)orientation;
+- (void)setAppOrientation:(UIInterfaceOrientation)orientation;
 #endif
 
 /// \brief 主播方开启美颜功能
@@ -103,11 +105,11 @@ typedef enum {
 /// \return true:调用成功；false:调用失败
 - (bool)setPreviewViewMode:(RSCVideoViewMode)mode;
 
-/// \brief 设置预览渲染朝向
-/// \param rotate 旋转角度
-/// \return true 成功，false 失败
-/// \note 使用setAppOrientation 替代
-- (bool)setPreviewRotation:(int)rotate;
+///// \brief 设置预览渲染朝向
+///// \param rotate 旋转角度
+///// \return true 成功，false 失败
+///// \note 使用setAppOrientation 替代
+//- (bool)setPreviewRotation:(int)rotate;
 
 /// \brief 是否开启码率控制（在带宽不足的情况下码率自动适应当前带宽)
 /// \param enable true 启用，false 不启用

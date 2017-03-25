@@ -167,7 +167,7 @@
 
 -(void)onInit{
     //摄像头
-    _videoCamera = [[AWGPUImageVideoCamera alloc] initWithSessionPreset:self.captureSessionPreset cameraPosition:AVCaptureDevicePositionFront];
+    _videoCamera = [[AWGPUImageVideoCamera alloc] initWithSessionPreset:self.captureSessionPreset cameraPosition:AVCaptureDevicePositionBack];
     //声音
     [_videoCamera addAudioInputsAndOutputs];
     //屏幕方向

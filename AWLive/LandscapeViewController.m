@@ -10,25 +10,28 @@
 #import "RSCLiveApi.h"
 #import "PureLayout.h"
 
-static NSString *sRtmpUrl = @"rtmp://live.roadshowchina.cn/live/123456";
-
+//static NSString *sRtmpUrl = @"rtmp://live.roadshowchina.cn/live/123456";
+static NSString *sRtmpUrl = @"rtmp://rtmp-w.quklive.com/live/w1490414374429984";
 @interface LandscapeViewController ()
 @property (nonatomic, strong) RSCLiveApi *api;
 @property (nonatomic, strong) UIButton *startBtn;
+
 @end
 
 @implementation LandscapeViewController
 
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-}
-
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    CGFloat dx = [UIScreen mainScreen].bounds.size.width / 2 - [UIScreen mainScreen].bounds.size.height / 2;
-    CGFloat dy = [UIScreen mainScreen].bounds.size.width / 2 - [UIScreen mainScreen].bounds.size.height / 2;
-    CGAffineTransform transform = CGAffineTransformMakeTranslation(-dx, -dy);
-    self.preview.transform = CGAffineTransformRotate(transform, -M_PI_2);
+    if (UIInterfaceOrientationIsLandscape(self.orientation)) {
+        CGFloat dx = [UIScreen mainScreen].bounds.size.width / 2 - [UIScreen mainScreen].bounds.size.height / 2;
+        CGFloat dy = [UIScreen mainScreen].bounds.size.width / 2 - [UIScreen mainScreen].bounds.size.height / 2;
+        CGAffineTransform transform = CGAffineTransformMakeTranslation(-dx, -dy);
+        self.preview.transform = CGAffineTransformRotate(transform, -M_PI_2);
+    }
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
 }
 
 - (void)viewDidLoad {
@@ -39,6 +42,20 @@ static NSString *sRtmpUrl = @"rtmp://live.roadshowchina.cn/live/123456";
     [self.view sendSubviewToBack:_preview];
     [_preview autoPinEdgesToSuperviewEdges];
     [_preview layoutIfNeeded];
+    
+    UIButton *closeButton = [[UIButton alloc] initForAutoLayout];
+    [closeButton setTitle:@"关闭" forState:UIControlStateNormal];
+//    closeButton.layer.borderColor = [UIColor blackColor].CGColor;
+//    closeButton.layer.borderWidth = 1;
+    closeButton.backgroundColor = [UIColor blackColor];
+    [closeButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [closeButton addTarget:self action:@selector(onClose) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:closeButton];
+    
+    [closeButton autoSetDimensionsToSize:CGSizeMake(60, 44)];
+    [closeButton autoPinEdgeToSuperviewEdge:ALEdgeTop withInset:64];
+    [closeButton autoPinEdgeToSuperviewEdge:ALEdgeTrailing withInset:30];
+    
     self.startBtn = [[UIButton alloc] initForAutoLayout];
     [self.startBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self.startBtn setTitleColor:[UIColor grayColor] forState:UIControlStateHighlighted];
@@ -52,8 +69,14 @@ static NSString *sRtmpUrl = @"rtmp://live.roadshowchina.cn/live/123456";
     [self.startBtn autoAlignAxisToSuperviewAxis:ALAxisVertical];
     
     _api = [[RSCLiveApi alloc] init];
+    [_api setAppOrientation:self.orientation];
     [_api setPreviewView:_preview];
     [_api startPreview];
+}
+
+- (void)onClose {
+    [_api stopPublishing];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)onStartClick {
@@ -70,16 +93,26 @@ static NSString *sRtmpUrl = @"rtmp://live.roadshowchina.cn/live/123456";
 }
 
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations {
-    return UIInterfaceOrientationMaskLandscapeRight;
+    if (UIInterfaceOrientationIsPortrait(self.orientation)) {
+        return UIInterfaceOrientationMaskPortrait;
+    } else {
+        return UIInterfaceOrientationMaskLandscapeRight;
+    }
+
 }
 
 - (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation {
-    return UIInterfaceOrientationLandscapeRight;
+    if (UIInterfaceOrientationIsPortrait(self.orientation)) {
+        return UIInterfaceOrientationPortrait;
+    } else {
+        return UIInterfaceOrientationLandscapeRight;
+    }
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
     return NO;
 }
+
 /*
 #pragma mark - Navigation
 

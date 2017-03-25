@@ -43,18 +43,17 @@
     [self updateFps: self.videoConfig.fps];
 }
 
--(void)onInit{
+- (void)onInit {
     [self createCaptureDevice];
     [self createOutput];
     [self createCaptureSession];
 
-    
     //更新fps
     [self updateFps: self.videoConfig.fps];
 }
 
 //初始化视频设备
--(void) createCaptureDevice{
+- (void)createCaptureDevice {
     //创建视频设备
     NSArray *videoDevices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
     //初始化摄像头
@@ -69,7 +68,7 @@
 }
 
 //切换摄像头
--(void)setVideoInputDevice:(AVCaptureDeviceInput *)videoInputDevice{
+- (void)setVideoInputDevice:(AVCaptureDeviceInput *)videoInputDevice {
     if ([videoInputDevice isEqual:_videoInputDevice]) {
         return;
     }
@@ -95,7 +94,7 @@
 }
 
 //创建预览
--(void) createPreviewLayer{
+- (void)createPreviewLayer {
     if (self.previewLayer) {
         [self.previewLayer removeFromSuperlayer];
     }
@@ -105,7 +104,7 @@
     [self.preview.layer addSublayer:self.previewLayer];
 }
 
--(void) setVideoOutConfig{
+- (void)setVideoOutConfig {
     for (AVCaptureConnection *conn in self.videoDataOutput.connections) {
 //        if (conn.isVideoStabilizationSupported) {
 //            [conn setPreferredVideoStabilizationMode:AVCaptureVideoStabilizationModeAuto];
@@ -195,7 +194,7 @@
 }
 
 //销毁会话
--(void) destroyCaptureSession{
+- (void)destroyCaptureSession {
     if (self.captureSession) {
         [self.captureSession removeInput:self.audioInputDevice];
         [self.captureSession removeInput:self.videoInputDevice];
@@ -205,7 +204,7 @@
     self.captureSession = nil;
 }
 
--(void) createOutput{
+- (void)createOutput {
     
     dispatch_queue_t captureQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     
@@ -219,7 +218,7 @@
     [self.audioDataOutput setSampleBufferDelegate:self queue:captureQueue];
 }
 
--(void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection{
+- (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection{
     if (self.isCapturing) {
         if ([self.videoDataOutput isEqual:captureOutput]) {
             [self sendVideoSampleBuffer:sampleBuffer];
