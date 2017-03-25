@@ -7,11 +7,14 @@
 //
 
 #import "ViewController.h"
-#import "LandscapeViewController.h"
+#import "PublishViewController.h"
 #import "PureLayout.h"
 
+static NSString *sRtmpUrl = @"rtmp://rtmp-w.quklive.com/live/w1490414374429984";
+
 @interface ViewController ()
-@property (nonatomic, strong) LandscapeViewController *vc;
+@property (nonatomic, strong) PublishViewController *vc;
+@property (nonatomic, strong) UITextField *textField;
 @end
 
 @implementation ViewController
@@ -36,6 +39,11 @@
     [portraitPush addTarget:self action:@selector(portraitPush) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:portraitPush];
     
+    _textField = [[UITextField alloc] initForAutoLayout];
+    _textField.text = sRtmpUrl;
+    _textField.borderStyle = UITextBorderStyleLine;
+    [self.view addSubview:_textField];
+    
     [landscapePush autoSetDimensionsToSize:CGSizeMake(100, 44)];
     [landscapePush autoPinEdgeToSuperviewEdge:ALEdgeTop withInset:90];
     [landscapePush autoPinEdgeToSuperviewEdge:ALEdgeLeading withInset:30];
@@ -43,19 +51,28 @@
     [portraitPush autoSetDimensionsToSize:CGSizeMake(100, 44)];
     [portraitPush autoPinEdgeToSuperviewEdge:ALEdgeTop withInset:90];
     [portraitPush autoPinEdgeToSuperviewEdge:ALEdgeTrailing withInset:30];
+    
+    [_textField autoPinEdge:ALEdgeTop toEdge:ALEdgeBottom ofView:landscapePush withOffset:30];
+    [_textField autoPinEdgeToSuperviewEdge:ALEdgeLeading];
+    [_textField autoSetDimensionsToSize:CGSizeMake([UIScreen mainScreen].bounds.size.width, 44)];
 }
 
 - (void)landscapePush {
-    self.vc = [LandscapeViewController new];
+    self.vc = [PublishViewController new];
     self.vc.orientation = UIInterfaceOrientationLandscapeRight;
+    self.vc.pushUrl = self.textField.text;
     [self presentViewController:self.vc animated:YES completion:nil];
 }
 
 - (void)portraitPush {
-    self.vc = [LandscapeViewController new];
+    self.vc = [PublishViewController new];
     self.vc.orientation = UIInterfaceOrientationPortrait;
+    self.vc.pushUrl = self.textField.text;
     [self presentViewController:self.vc animated:YES completion:nil];
-    
+}
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    [self.view endEditing:YES];
 }
 
 - (void)didReceiveMemoryWarning {

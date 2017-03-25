@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		002C825B1E812B9000BC8C7F /* LandscapeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 002C825A1E812B9000BC8C7F /* LandscapeViewController.m */; };
+		002C825B1E812B9000BC8C7F /* PublishViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 002C825A1E812B9000BC8C7F /* PublishViewController.m */; };
 		005A71FC1E8210C800A21B64 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 005A71EF1E8210C700A21B64 /* LICENSE */; };
 		005A71FD1E8210C800A21B64 /* ALView+PureLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 005A71F31E8210C700A21B64 /* ALView+PureLayout.m */; };
 		005A71FE1E8210C800A21B64 /* NSArray+PureLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 005A71F51E8210C700A21B64 /* NSArray+PureLayout.m */; };
@@ -34,7 +34,6 @@
 		A4269DA21DCE2A390010A4EB /* AWSWX264Encoder.m in Sources */ = {isa = PBXBuildFile; fileRef = A4269D8E1DCE2A390010A4EB /* AWSWX264Encoder.m */; };
 		A4269DA31DCE2A390010A4EB /* AWGPUImageVideoCamera.m in Sources */ = {isa = PBXBuildFile; fileRef = A4269D911DCE2A390010A4EB /* AWGPUImageVideoCamera.m */; };
 		A4269DA41DCE2A390010A4EB /* GPUImageBeautifyFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = A4269D931DCE2A390010A4EB /* GPUImageBeautifyFilter.m */; };
-		A4269DA51DCE2A390010A4EB /* TestAVCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = A4269D961DCE2A390010A4EB /* TestAVCapture.m */; };
 		A4269F761DCE2A8D0010A4EB /* libfaac.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A4269DAD1DCE2A8C0010A4EB /* libfaac.a */; };
 		A4269F771DCE2A8E0010A4EB /* librtmp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A4269DB51DCE2A8C0010A4EB /* librtmp.a */; };
 		A4269F781DCE2A8E0010A4EB /* libx264.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A4269DBB1DCE2A8C0010A4EB /* libx264.a */; };
@@ -96,8 +95,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		002C82591E812B9000BC8C7F /* LandscapeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LandscapeViewController.h; sourceTree = "<group>"; };
-		002C825A1E812B9000BC8C7F /* LandscapeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LandscapeViewController.m; sourceTree = "<group>"; };
+		002C82591E812B9000BC8C7F /* PublishViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PublishViewController.h; sourceTree = "<group>"; };
+		002C825A1E812B9000BC8C7F /* PublishViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PublishViewController.m; sourceTree = "<group>"; };
 		005A71EF1E8210C700A21B64 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		005A71F21E8210C700A21B64 /* ALView+PureLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ALView+PureLayout.h"; sourceTree = "<group>"; };
 		005A71F31E8210C700A21B64 /* ALView+PureLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ALView+PureLayout.m"; sourceTree = "<group>"; };
@@ -149,8 +148,6 @@
 		A4269D911DCE2A390010A4EB /* AWGPUImageVideoCamera.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AWGPUImageVideoCamera.m; sourceTree = "<group>"; };
 		A4269D921DCE2A390010A4EB /* GPUImageBeautifyFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPUImageBeautifyFilter.h; sourceTree = "<group>"; };
 		A4269D931DCE2A390010A4EB /* GPUImageBeautifyFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPUImageBeautifyFilter.m; sourceTree = "<group>"; };
-		A4269D951DCE2A390010A4EB /* TestAVCapture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestAVCapture.h; sourceTree = "<group>"; };
-		A4269D961DCE2A390010A4EB /* TestAVCapture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestAVCapture.m; sourceTree = "<group>"; };
 		A4269DAA1DCE2A8C0010A4EB /* faac.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = faac.h; sourceTree = "<group>"; };
 		A4269DAB1DCE2A8C0010A4EB /* faaccfg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = faaccfg.h; sourceTree = "<group>"; };
 		A4269DAD1DCE2A8C0010A4EB /* libfaac.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libfaac.a; sourceTree = "<group>"; };
@@ -297,8 +294,8 @@
 				A4269D5E1DCE2A1B0010A4EB /* AppDelegate.m */,
 				A4269D601DCE2A1B0010A4EB /* ViewController.h */,
 				A4269D611DCE2A1B0010A4EB /* ViewController.m */,
-				002C82591E812B9000BC8C7F /* LandscapeViewController.h */,
-				002C825A1E812B9000BC8C7F /* LandscapeViewController.m */,
+				002C82591E812B9000BC8C7F /* PublishViewController.h */,
+				002C825A1E812B9000BC8C7F /* PublishViewController.m */,
 				A4269D631DCE2A1B0010A4EB /* Main.storyboard */,
 				A4269D661DCE2A1B0010A4EB /* Assets.xcassets */,
 				A4269D681DCE2A1B0010A4EB /* LaunchScreen.storyboard */,
@@ -404,8 +401,6 @@
 		A4269D941DCE2A390010A4EB /* Test */ = {
 			isa = PBXGroup;
 			children = (
-				A4269D951DCE2A390010A4EB /* TestAVCapture.h */,
-				A4269D961DCE2A390010A4EB /* TestAVCapture.m */,
 			);
 			path = Test;
 			sourceTree = "<group>";
@@ -770,12 +765,11 @@
 				A426A0621DCF71660010A4EB /* AWAVCaptureManager.m in Sources */,
 				A4269F801DCE2A8E0010A4EB /* aw_thread_poll.c in Sources */,
 				A4269DA01DCE2A390010A4EB /* AWHWH264Encoder.m in Sources */,
-				002C825B1E812B9000BC8C7F /* LandscapeViewController.m in Sources */,
+				002C825B1E812B9000BC8C7F /* PublishViewController.m in Sources */,
 				A4269D971DCE2A390010A4EB /* AWAVCapture.m in Sources */,
 				A4269D9E1DCE2A390010A4EB /* AWVideoEncoder.m in Sources */,
 				A4269D991DCE2A390010A4EB /* AWGPUImageAVCapture.m in Sources */,
 				A4269DA41DCE2A390010A4EB /* GPUImageBeautifyFilter.m in Sources */,
-				A4269DA51DCE2A390010A4EB /* TestAVCapture.m in Sources */,
 				005A71FF1E8210C800A21B64 /* NSLayoutConstraint+PureLayout.m in Sources */,
 				A4269D9D1DCE2A390010A4EB /* AWEncoder.m in Sources */,
 				005A71FE1E8210C800A21B64 /* NSArray+PureLayout.m in Sources */,

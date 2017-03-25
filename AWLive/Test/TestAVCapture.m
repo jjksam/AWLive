@@ -7,7 +7,6 @@
 #import "TestAVCapture.h"
 
 #import "AWAVCaptureManager.h"
-#import "LandscapeViewController.h"
 #import "PureLayout.h"
 
 /*

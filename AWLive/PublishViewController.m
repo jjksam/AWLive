@@ -1,24 +1,24 @@
 //
-//  LandscapeViewController.m
+//  PublishViewController.m
 //  AWLive
 //
 //  Created by jjk on 2017/3/21.
 //
 //
 
-#import "LandscapeViewController.h"
+#import "PublishViewController.h"
 #import "RSCLiveApi.h"
 #import "PureLayout.h"
 
 //static NSString *sRtmpUrl = @"rtmp://live.roadshowchina.cn/live/123456";
 static NSString *sRtmpUrl = @"rtmp://rtmp-w.quklive.com/live/w1490414374429984";
-@interface LandscapeViewController ()
+@interface PublishViewController ()
 @property (nonatomic, strong) RSCLiveApi *api;
 @property (nonatomic, strong) UIButton *startBtn;
 
 @end
 
-@implementation LandscapeViewController
+@implementation PublishViewController
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
@@ -80,7 +80,7 @@ static NSString *sRtmpUrl = @"rtmp://rtmp-w.quklive.com/live/w1490414374429984";
 }
 
 - (void)onStartClick {
-    [self.api startPublishingWithUrl:sRtmpUrl];
+    [self.api startPublishingWithUrl:self.pushUrl];
 }
 
 - (void)didReceiveMemoryWarning {
