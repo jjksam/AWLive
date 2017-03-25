@@ -13,6 +13,7 @@
 		005A71FE1E8210C800A21B64 /* NSArray+PureLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 005A71F51E8210C700A21B64 /* NSArray+PureLayout.m */; };
 		005A71FF1E8210C800A21B64 /* NSLayoutConstraint+PureLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 005A71F71E8210C700A21B64 /* NSLayoutConstraint+PureLayout.m */; };
 		005A72001E8210C800A21B64 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 005A71FB1E8210C800A21B64 /* README.md */; };
+		00E37B001E84CA4C0083F62C /* RSCLiveApi.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E37AFF1E84CA4C0083F62C /* RSCLiveApi.m */; };
 		A4269D5C1DCE2A1B0010A4EB /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A4269D5B1DCE2A1B0010A4EB /* main.m */; };
 		A4269D5F1DCE2A1B0010A4EB /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A4269D5E1DCE2A1B0010A4EB /* AppDelegate.m */; };
 		A4269D621DCE2A1B0010A4EB /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4269D611DCE2A1B0010A4EB /* ViewController.m */; };
@@ -108,6 +109,8 @@
 		005A71F91E8210C700A21B64 /* PureLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PureLayout.h; sourceTree = "<group>"; };
 		005A71FA1E8210C700A21B64 /* PureLayoutDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PureLayoutDefines.h; sourceTree = "<group>"; };
 		005A71FB1E8210C800A21B64 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		00E37AFE1E84CA4C0083F62C /* RSCLiveApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSCLiveApi.h; sourceTree = "<group>"; };
+		00E37AFF1E84CA4C0083F62C /* RSCLiveApi.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSCLiveApi.m; sourceTree = "<group>"; };
 		A4269D571DCE2A1B0010A4EB /* AWLive.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AWLive.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A4269D5B1DCE2A1B0010A4EB /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		A4269D5D1DCE2A1B0010A4EB /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -288,6 +291,8 @@
 				A461BE371DE826BE00F18219 /* Resources */,
 				A4269D711DCE2A390010A4EB /* PushStream */,
 				A4269D941DCE2A390010A4EB /* Test */,
+				00E37AFE1E84CA4C0083F62C /* RSCLiveApi.h */,
+				00E37AFF1E84CA4C0083F62C /* RSCLiveApi.m */,
 				A4269D5D1DCE2A1B0010A4EB /* AppDelegate.h */,
 				A4269D5E1DCE2A1B0010A4EB /* AppDelegate.m */,
 				A4269D601DCE2A1B0010A4EB /* ViewController.h */,
@@ -752,6 +757,7 @@
 				A4269F7D1DCE2A8E0010A4EB /* aw_dict.c in Sources */,
 				A4269F7C1DCE2A8E0010A4EB /* aw_data.c in Sources */,
 				A4269F7F1DCE2A8E0010A4EB /* aw_rtmp.c in Sources */,
+				00E37B001E84CA4C0083F62C /* RSCLiveApi.m in Sources */,
 				A4269D621DCE2A1B0010A4EB /* ViewController.m in Sources */,
 				A4269F841DCE2A8E0010A4EB /* aw_x264.c in Sources */,
 				005A71FD1E8210C800A21B64 /* ALView+PureLayout.m in Sources */,
@@ -916,7 +922,7 @@
 				ENABLE_BITCODE = NO;
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/clibs/3th-party/libyuv/include";
 				INFOPLIST_FILE = AWLive/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -940,7 +946,7 @@
 				ENABLE_BITCODE = NO;
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/clibs/3th-party/libyuv/include";
 				INFOPLIST_FILE = AWLive/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",

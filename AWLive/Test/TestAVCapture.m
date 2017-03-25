@@ -15,7 +15,7 @@
  */
 
 //请修改此地址
-static NSString *sRtmpUrl = @"rtmp://rtmp-w.quklive.com/live/w1486371182801972";
+static NSString *sRtmpUrl = @"rtmp://live.roadshowchina.cn/live/123456";
 
 @interface TestVideoCapture ()<AWAVCaptureDelegate>
 

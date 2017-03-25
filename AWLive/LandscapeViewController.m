@@ -7,35 +7,28 @@
 //
 
 #import "LandscapeViewController.h"
-#import "TestAVCapture.h"
+#import "RSCLiveApi.h"
 #import "PureLayout.h"
 
+static NSString *sRtmpUrl = @"rtmp://live.roadshowchina.cn/live/123456";
+
 @interface LandscapeViewController ()
-@property (nonatomic, strong) TestVideoCapture *testVideoCapture;
+@property (nonatomic, strong) RSCLiveApi *api;
+@property (nonatomic, strong) UIButton *startBtn;
 @end
 
 @implementation LandscapeViewController
 
-//- (UIView *)preview {
-//    if (!_preview) {
-//        _preview = [UIView new];
-//        [self.view addSubview:_preview];
-//        [self.view sendSubviewToBack:_preview];
-//        [_preview autoPinEdgesToSuperviewEdges];
-//        [_preview layoutIfNeeded];
-//        [UIView animateWithDuration:0.1 animations:^{
-//            
-//        }];
-//        
-////        CGFloat dx = [UIScreen mainScreen].bounds.size.height / 2 - [UIScreen mainScreen].bounds.size.width / 2;
-////        CGFloat dy = [UIScreen mainScreen].bounds.size.height / 2 - [UIScreen mainScreen].bounds.size.width / 2;
-////        CGAffineTransform transform = CGAffineTransformMakeTranslation(-dx, -dy);
-////        _preview.transform = CGAffineTransformRotate(transform, -M_PI_2);
-//    }
-//    return _preview;
-//}
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    CGFloat dx = [UIScreen mainScreen].bounds.size.width / 2 - [UIScreen mainScreen].bounds.size.height / 2;
+    CGFloat dy = [UIScreen mainScreen].bounds.size.width / 2 - [UIScreen mainScreen].bounds.size.height / 2;
+    CGAffineTransform transform = CGAffineTransformMakeTranslation(-dx, -dy);
+    self.preview.transform = CGAffineTransformRotate(transform, -M_PI_2);
 }
 
 - (void)viewDidLoad {
@@ -46,13 +39,25 @@
     [self.view sendSubviewToBack:_preview];
     [_preview autoPinEdgesToSuperviewEdges];
     [_preview layoutIfNeeded];
-    self.testVideoCapture = [[TestVideoCapture alloc] initWithViewController:self];
+    self.startBtn = [[UIButton alloc] initForAutoLayout];
+    [self.startBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [self.startBtn setTitleColor:[UIColor grayColor] forState:UIControlStateHighlighted];
+    self.startBtn.backgroundColor = [UIColor blackColor];
+    [self.startBtn setTitle:@"开始直播" forState:UIControlStateNormal];
+    [self.startBtn addTarget:self action:@selector(onStartClick) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.startBtn];
     
+    [self.startBtn autoSetDimensionsToSize:CGSizeMake([UIScreen mainScreen].bounds.size.width - 80, 40)];
+    [self.startBtn autoPinEdgeToSuperviewEdge:ALEdgeBottom withInset:30];
+    [self.startBtn autoAlignAxisToSuperviewAxis:ALAxisVertical];
+    
+    _api = [[RSCLiveApi alloc] init];
+    [_api setPreviewView:_preview];
+    [_api startPreview];
 }
 
-- (void)viewWillLayoutSubviews{
-    [super viewWillLayoutSubviews];
-    [self.testVideoCapture onLayout];
+- (void)onStartClick {
+    [self.api startPublishingWithUrl:sRtmpUrl];
 }
 
 - (void)didReceiveMemoryWarning {
