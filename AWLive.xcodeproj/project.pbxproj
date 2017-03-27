@@ -287,7 +287,6 @@
 				005A71EE1E8210C700A21B64 /* PureLayout */,
 				A461BE371DE826BE00F18219 /* Resources */,
 				A4269D711DCE2A390010A4EB /* PushStream */,
-				A4269D941DCE2A390010A4EB /* Test */,
 				00E37AFE1E84CA4C0083F62C /* RSCLiveApi.h */,
 				00E37AFF1E84CA4C0083F62C /* RSCLiveApi.m */,
 				A4269D5D1DCE2A1B0010A4EB /* AppDelegate.h */,
@@ -396,13 +395,6 @@
 				A4269D931DCE2A390010A4EB /* GPUImageBeautifyFilter.m */,
 			);
 			path = GpuImage;
-			sourceTree = "<group>";
-		};
-		A4269D941DCE2A390010A4EB /* Test */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Test;
 			sourceTree = "<group>";
 		};
 		A4269DA61DCE2A8C0010A4EB /* clibs */ = {
