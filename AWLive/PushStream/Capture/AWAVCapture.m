@@ -20,7 +20,8 @@ extern void aw_rtmp_state_changed_cb_in_oc(aw_rtmp_state old_state, aw_rtmp_stat
 //编码队列，发送队列
 @property (nonatomic, strong) dispatch_queue_t encodeSampleQueue;
 @property (nonatomic, strong) dispatch_queue_t sendSampleQueue;
-
+// 是否发送了 metadata
+@property (nonatomic, unsafe_unretained) BOOL isMetaDataSent;
 //是否已发送了sps/pps
 @property (nonatomic, unsafe_unretained) BOOL isSpsPpsAndAudioSpecificConfigSent;
 
@@ -136,6 +137,7 @@ extern void aw_rtmp_state_changed_cb_in_oc(aw_rtmp_state old_state, aw_rtmp_stat
 
 -(void) stopCapture{
     self.isCapturing = NO;
+    self.isMetaDataSent = NO;
     self.isSpsPpsAndAudioSpecificConfigSent = NO;
     __weak typeof(self) weakSelf = self;
     dispatch_sync(self.sendSampleQueue, ^{
@@ -226,9 +228,11 @@ extern void aw_rtmp_state_changed_cb_in_oc(aw_rtmp_state old_state, aw_rtmp_stat
     if (video_tag) {
         dispatch_async(sendQueue, ^{
             if(weakSelf.isCapturing){
-                if (!weakSelf.isSpsPpsAndAudioSpecificConfigSent) {
+                if (!weakSelf.isMetaDataSent) {
+                    [weakSelf sendMetaDataToSendQueue:sendQueue];
+                } else if (!weakSelf.isSpsPpsAndAudioSpecificConfigSent) {
                     [weakSelf sendSpsPpsAndAudioSpecificConfigTagToSendQueue:sendQueue];
-                }else{
+                } else {
                     aw_streamer_send_video_data(video_tag);
                 }
             }
@@ -241,14 +245,65 @@ extern void aw_rtmp_state_changed_cb_in_oc(aw_rtmp_state old_state, aw_rtmp_stat
     if(audio_tag){
         dispatch_async(sendQueue, ^{
             if(weakSelf.isCapturing){
-                if (!weakSelf.isSpsPpsAndAudioSpecificConfigSent) {
+                if (!weakSelf.isMetaDataSent) {
+                    [weakSelf sendMetaDataToSendQueue:sendQueue];
+                } else if (!weakSelf.isSpsPpsAndAudioSpecificConfigSent) {
                     [weakSelf sendSpsPpsAndAudioSpecificConfigTagToSendQueue:sendQueue];
-                }else{
+                } else {
                     aw_streamer_send_audio_data(audio_tag);
                 }
             }
         });
     }
+}
+
+- (void)sendMetaDataToSendQueue:(dispatch_queue_t)sendQueue {
+    if (self.isMetaDataSent) {
+        return;
+    }
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(sendQueue, ^{
+        if (!weakSelf.isCapturing || weakSelf.isMetaDataSent) {
+            return;
+        }
+        // dataFrame
+        aw_flv_script_tag *scriptTag = [weakSelf.encoderManager.videoEncoder createScriptDataTag];
+        if (scriptTag) {
+            scriptTag->duration = 0; // live don't have duration
+            if (self.videoConfig.orientation == UIInterfaceOrientationPortrait) {
+                scriptTag->width = self.videoConfig.width;
+                scriptTag->height = self.videoConfig.height;
+            } else {
+                scriptTag->width = self.videoConfig.height;
+                scriptTag->height = self.videoConfig.width;
+            }
+            scriptTag->video_data_rate = self.videoConfig.bitrate / 1000.0;
+            scriptTag->frame_rate = self.videoConfig.fps;
+            scriptTag->v_frame_rate = self.videoConfig.fps;
+            scriptTag->a_sample_rate = self.audioConfig.sampleRate;
+            scriptTag->a_sample_size = self.audioConfig.sampleSize;
+            scriptTag->file_size = 0;
+        }
+//        //video sps pps tag
+//        aw_flv_video_tag *spsPpsTag = [weakSelf.encoderManager.videoEncoder createSpsPpsFlvTag];
+//        if (spsPpsTag) {
+//            scriptTag->v_codec_id = spsPpsTag->codec_id;
+//        }
+//        //audio specific config tag
+//        aw_flv_audio_tag *audioSpecificConfigTag = [weakSelf.encoderManager.audioEncoder createAudioSpecificConfigFlvTag];
+//        if (audioSpecificConfigTag) {
+//            scriptTag->a_sample_rate = audioSpecificConfigTag->sound_rate;
+//            scriptTag->a_sample_size = audioSpecificConfigTag->sound_size;
+//            scriptTag->a_codec_id = audioSpecificConfigTag->sound_format;
+////            aw_streamer_send_audio_specific_config_tag(audioSpecificConfigTag);
+//        }
+        if (scriptTag) {
+            aw_streamer_send_meta_data(scriptTag);
+        }
+        weakSelf.isMetaDataSent = TRUE;
+        
+        aw_log("[D] is meta data sent=%d", weakSelf.isMetaDataSent);
+    });
 }
 
 -(void) sendSpsPpsAndAudioSpecificConfigTagToSendQueue:(dispatch_queue_t) sendQueue{

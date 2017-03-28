@@ -23,7 +23,8 @@ extern void aw_streamer_close();
 
 //是否正在streaming
 extern int8_t aw_streamer_is_streaming();
-
+//发送metadata
+extern void aw_streamer_send_meta_data(aw_flv_script_tag *script_tag);
 //发送视频flv tag
 extern void aw_streamer_send_video_data(aw_flv_video_tag *video_tag);
 //发送音频flv tag

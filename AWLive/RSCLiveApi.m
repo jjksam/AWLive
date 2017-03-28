@@ -32,7 +32,8 @@
         _captureManager.captureType = AWAVCaptureTypeSystem; // 系统视频捕获推流, iPhone 6 CPU 40%左右
         _captureManager.audioEncoderType = AWAudioEncoderTypeHWAACLC;
         _captureManager.videoEncoderType = AWVideoEncoderTypeHWH264;
-//      _captureManager.videoEncoderType = AWVideoEncoderTypeSWX264; // 软编码，停止推流会崩溃
+//        _captureManager.audioEncoderType = AWAudioEncoderTypeSWFAAC; // 软编码，iPhone 5需要使用声音软编码
+//        _captureManager.videoEncoderType = AWVideoEncoderTypeSWX264; // 软编码，停止推流会崩溃, iPhone 5/5s没法用硬件加速
         _captureManager.audioConfig = [[AWAudioConfig alloc] init];
         _captureManager.videoConfig = [[AWVideoConfig alloc] init];
         
@@ -78,6 +79,9 @@
 
 #pragma mark 事件
 -(void)avCapture:(AWAVCapture *)capture stateChangeFrom:(aw_rtmp_state)fromState toState:(aw_rtmp_state)toState{
+    if ([self.delegate respondsToSelector:@selector(onPublishStateChangeFrom:toState:)]) {
+        [self.delegate onPublishStateChangeFrom:fromState toState:toState];
+    }
     switch (toState) {
         case aw_rtmp_state_idle: {
 //            self.startBtn.enabled = YES;

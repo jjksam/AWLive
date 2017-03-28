@@ -103,7 +103,7 @@ typedef struct aw_flv_script_tag{
     double height;
     double video_data_rate;
     double frame_rate;
-    double v_frame_rate;
+    double v_frame_rate; // 多余？跟frame_rate重复？
     double a_frame_rate;
     double v_codec_id;
     double a_sample_rate;

@@ -40,6 +40,7 @@ typedef enum {
 @interface RSCLiveApi : NSObject
 
 @property (assign) UIInterfaceOrientation appOrientation;
+@property (nonatomic, weak) id<RSCLivePublisherDelegate> delegate;
 
 + (NSString *)version;
 /// \brief 调试信息开关
@@ -72,7 +73,7 @@ typedef enum {
 
 /// \brief 开始直播
 /// \param[in] pushUrl 推流地址
-/// \return true，成功，等待 [RSCLivePublisherDelegate -onPublishStateUpdate:streamID:streamInfo:] 回调，false 失败
+/// \return true，成功，等待 - (void)onPublishStateChangeFrom:(int)fromState toState:(int)toState;] 回调，false 失败
 - (bool)startPublishingWithUrl:(NSString *)pushUrl;
 
 /// \brief 停止直播
@@ -143,19 +144,11 @@ typedef enum {
 @protocol RSCLivePublisherDelegate <NSObject>
 
 /// \brief 推流状态更新
-/// \param[in] stateCode 状态码
-/// \param[in] streamID 流ID
-/// \param[in] info 推流信息
-- (void)onPublishStateUpdate:(int)stateCode streamID:(NSString *)streamID streamInfo:(NSDictionary *)info;
+/// \param[in] fromState 状态码
+/// \param[in] toState 流ID
+- (void)onPublishStateChangeFrom:(int)fromState toState:(int)toState;
 
 @optional
-
-/// \brief 收到连麦请求
-/// \param[in] seq 请求 seq
-/// \param[in] userId 来源用户ID
-/// \param[in] userName 来源用户名
-/// \param[in] roomID 房间ID
-- (void)onJoinLiveRequest:(int)seq fromUserID:(NSString *)userId fromUserName:(NSString *)userName roomID:(NSString *)roomID;
 
 /// \brief 发布质量更新
 /// \param quality 0 ~ 3 分别对应优良中差
@@ -167,13 +160,6 @@ typedef enum {
 /// \brief 采集视频的宽度和高度变化通知
 /// \param size 视频大小
 - (void)onCaptureVideoSizeChangedTo:(CGSize)size;
-
-/// \brief 混流配置更新结果回调
-/// \param errorCode 错误码，0 表示没有错误
-/// \param mixStreamID 混流ID
-/// \param info 混流播放信息
-- (void)onMixStreamConfigUpdate:(int)errorCode mixStream:(NSString *)mixStreamID streamInfo:(NSDictionary *)info;
-
 
 /// \brief 混音数据输入回调
 /// \param pData 数据缓存起始地址

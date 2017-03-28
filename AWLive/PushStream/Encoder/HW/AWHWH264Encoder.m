@@ -11,6 +11,7 @@
 @interface AWHWH264Encoder()
 @property (nonatomic, unsafe_unretained) VTCompressionSessionRef vEnSession;
 @property (nonatomic, strong) dispatch_semaphore_t vSemaphore;
+@property (nonatomic, copy) NSData *scriptData;
 @property (nonatomic, copy) NSData *spsPpsData;
 @property (nonatomic, copy) NSData *naluData;
 @property (nonatomic, unsafe_unretained) BOOL isKeyFrame;
@@ -104,6 +105,14 @@
     CFRelease(pixelBuf);
     
     return NULL;
+}
+
+- (aw_flv_script_tag *)createScriptDataTag {
+    while(!self.spsPpsData) {
+        dispatch_semaphore_wait(self.vSemaphore, DISPATCH_TIME_FOREVER);
+    }
+    aw_flv_script_tag *script_tag = alloc_aw_flv_script_tag();
+    return script_tag;
 }
 
 -(aw_flv_video_tag *)createSpsPpsFlvTag{

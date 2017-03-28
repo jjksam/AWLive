@@ -28,6 +28,15 @@ static void aw_streamer_rtmp_state_changed_callback(aw_rtmp_state old_state, aw_
 static int8_t aw_steamer_open_rtmp_context();
 static void aw_streamer_close_rtmp_context();
 
+extern void aw_streamer_send_meta_data(aw_flv_script_tag *script_tag) {
+    if (!aw_streamer_is_rtmp_valid()) {
+        aw_log("[E] aw_streamer_send_video_data s_rtmp_ctx is NULL");
+        return;
+    }
+    //    aw_log("[D] aw_streamer_send_video_data timestamp=%u, compTime=%u", video_tag->common_tag.timestamp, video_tag->h264_composition_time);
+    
+    aw_streamer_send_flv_tag_to_rtmp(&script_tag->common_tag);
+}
 //video-----
 
 extern void aw_streamer_send_video_data(aw_flv_video_tag *video_tag){
@@ -127,9 +136,10 @@ extern int8_t aw_streamer_is_streaming(){
 
 static void aw_streamer_rtmp_state_changed_callback(aw_rtmp_state old_state, aw_rtmp_state new_state){
     if(new_state == aw_rtmp_state_connected){
-        //打开rtmp 先发送 配置tag
-        //        aw_streamer_send_video_sps_pps_tag();
-        //        aw_streamer_send_audio_specific_config_tag();
+        //打开rtmp 先发送 配置tag, 这个需要在sendSpsPpsAndAudioSpecificConfigTagToSendQueue里面做，因为这时才能获取到sps, pps
+//        aw_streamer_send_meta_data_to_rtmp();
+//                aw_streamer_send_video_sps_pps_tag();
+//                aw_streamer_send_audio_specific_config_tag();
     }else if(new_state == aw_rtmp_state_error_open){
         aw_streamer_close_rtmp_context();
     }

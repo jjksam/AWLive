@@ -12,6 +12,11 @@
     return aw_sw_encoder_encode_x264_data((int8_t *)yuvData.bytes, yuvData.length, self.manager.timestamp + 1);
 }
 
+- (aw_flv_script_tag *)createScriptDataTag {
+    aw_flv_script_tag *script_tag = alloc_aw_flv_script_tag();
+    return script_tag;
+}
+
 -(aw_flv_video_tag *)createSpsPpsFlvTag{
     return aw_sw_encoder_create_x264_sps_pps_tag();
 }

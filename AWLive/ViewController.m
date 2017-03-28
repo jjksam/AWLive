@@ -10,7 +10,9 @@
 #import "PublishViewController.h"
 #import "PureLayout.h"
 
-static NSString *sRtmpUrl = @"rtmp://rtmp-w.quklive.com/live/w1490414374429984";
+//static NSString *sRtmpUrl = @"rtmp://live.roadshowchina.cn/live/123456789";
+static NSString *sRtmpUrl = @"rtmp://rtmp-w.quklive.com/live/w1490686007356964";
+//static NSString *sRtmpUrl = @"rtmp://rtmp-w.quklive.com/live/w1490414374429984";
 
 @interface ViewController ()
 @property (nonatomic, strong) PublishViewController *vc;
