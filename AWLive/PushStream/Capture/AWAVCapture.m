@@ -284,19 +284,6 @@ extern void aw_rtmp_state_changed_cb_in_oc(aw_rtmp_state old_state, aw_rtmp_stat
             scriptTag->a_sample_size = self.audioConfig.sampleSize;
             scriptTag->file_size = 0;
         }
-//        //video sps pps tag
-//        aw_flv_video_tag *spsPpsTag = [weakSelf.encoderManager.videoEncoder createSpsPpsFlvTag];
-//        if (spsPpsTag) {
-//            scriptTag->v_codec_id = spsPpsTag->codec_id;
-//        }
-//        //audio specific config tag
-//        aw_flv_audio_tag *audioSpecificConfigTag = [weakSelf.encoderManager.audioEncoder createAudioSpecificConfigFlvTag];
-//        if (audioSpecificConfigTag) {
-//            scriptTag->a_sample_rate = audioSpecificConfigTag->sound_rate;
-//            scriptTag->a_sample_size = audioSpecificConfigTag->sound_size;
-//            scriptTag->a_codec_id = audioSpecificConfigTag->sound_format;
-////            aw_streamer_send_audio_specific_config_tag(audioSpecificConfigTag);
-//        }
         if (scriptTag) {
             aw_streamer_send_meta_data(scriptTag);
         }
