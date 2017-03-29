@@ -47,8 +47,9 @@ static OSStatus aacEncodeInputDataProc(AudioConverterRef inAudioConverter, UInt3
     
     OSStatus status = AudioConverterFillComplexBuffer(_aConverter, aacEncodeInputDataProc, (__bridge void * _Nullable)(self), &outputDataPacketSize, &outAudioBufferList, NULL);
     if (status == noErr) {
-        NSData *rawAAC = [NSData dataWithBytes: outAudioBufferList.mBuffers[0].mData length:outAudioBufferList.mBuffers[0].mDataByteSize];
-        self.manager.timestamp += 1024 * 1000 / self.audioConfig.sampleRate;
+        NSData *rawAAC = [NSData dataWithBytes:outAudioBufferList.mBuffers[0].mData length:outAudioBufferList.mBuffers[0].mDataByteSize];
+        self.manager.timestamp += 1024 * 1000 / self.audioConfig.sampleRate; // 刚好1024长度
+//        self.manager.timestamp += (uint32_t)rawAAC.length * 1000 / self.audioConfig.sampleRate;
         return aw_encoder_create_audio_tag((int8_t *)rawAAC.bytes, rawAAC.length, (uint32_t)self.manager.timestamp, &_faacConfig);
     }else{
         [self onErrorWithCode:AWEncoderErrorCodeAudioEncoderFailed des:@"aac 编码错误"];
@@ -88,29 +89,30 @@ static OSStatus aacEncodeInputDataProc(AudioConverterRef inAudioConverter, UInt3
         .mFormatFlags = kLinearPCMFormatFlagIsPacked | kLinearPCMFormatFlagIsSignedInteger | kLinearPCMFormatFlagIsNonInterleaved,
         .mReserved = 0
     };
-    
+
     AudioStreamBasicDescription outputAudioDes = {
         .mChannelsPerFrame = (uint32_t)self.audioConfig.channelCount,
+        .mSampleRate = self.audioConfig.sampleRate,
         .mFormatID = kAudioFormatMPEG4AAC,
         0
     };
     
     uint32_t outDesSize = sizeof(outputAudioDes);
-    AudioFormatGetProperty(kAudioFormatProperty_FormatInfo, 0, NULL, &outDesSize, &outputAudioDes);
+    AudioFormatGetProperty(kAudioFormatProperty_FormatInfo, 0, NULL, (UInt32 *)&outDesSize, &outputAudioDes);
     OSStatus status = AudioConverterNew(&inputAudioDes, &outputAudioDes, &_aConverter);
     if (status != noErr) {
         [self onErrorWithCode:AWEncoderErrorCodeCreateAudioConverterFailed des:@"硬编码AAC创建失败"];
     }
     
     //设置码率
-    uint32_t aBitrate = (uint32_t)self.audioConfig.bitrate;
+    uint32_t aBitrate = 64000;//(uint32_t)self.audioConfig.bitrate;
     uint32_t aBitrateSize = sizeof(aBitrate);
     status = AudioConverterSetProperty(_aConverter, kAudioConverterEncodeBitRate, aBitrateSize, &aBitrate);
     
     //查询最大输出
     uint32_t aMaxOutput = 0;
     uint32_t aMaxOutputSize = sizeof(aMaxOutput);
-    AudioConverterGetProperty(_aConverter, kAudioConverterPropertyMaximumOutputPacketSize, &aMaxOutputSize, &aMaxOutput);
+    AudioConverterGetProperty(_aConverter, kAudioConverterPropertyMaximumOutputPacketSize, (UInt32 *)&aMaxOutputSize, &aMaxOutput);
     self.aMaxOutputFrameSize = aMaxOutput;
     if (aMaxOutput == 0) {
         [self onErrorWithCode:AWEncoderErrorCodeAudioConverterGetMaxFrameSizeFailed des:@"AAC 获取最大frame size失败"];

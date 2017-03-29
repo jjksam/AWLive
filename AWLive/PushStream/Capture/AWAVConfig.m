@@ -8,15 +8,17 @@
 
 #include "aw_all.h"
 
+// https://en.wikipedia.org/wiki/Bit_rate
+
 @implementation AWAudioConfig
 - (instancetype)init
 {
     self = [super init];
     if (self) {
-        self.bitrate = 100000;
+        self.bitrate = 128000; // 128kbps
         self.channelCount = 1;
         self.sampleSize = 16;
-        self.sampleRate = 44100;
+        self.sampleRate = 44100; // Hz
     }
     return self;
 }
@@ -56,7 +58,7 @@
         self.height = 960;
 //        self.width = 360;
 //        self.height = 640;
-        self.bitrate = 800000;
+        self.bitrate = 800000; // 800kbps
         self.fps = 20;
         self.dataFormat = X264_CSP_NV12;
     }
