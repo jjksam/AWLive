@@ -36,7 +36,10 @@ static OSStatus aacEncodeInputDataProc(AudioConverterRef inAudioConverter, UInt3
 
 -(aw_flv_audio_tag *)encodePCMDataToFlvTag:(NSData *)pcmData{
     self.curFramePcmData = pcmData;
-    
+    _faacConfig.channel_count = self.audioConfig.channelCount;
+    _faacConfig.bitrate = 64000;
+    _faacConfig.sample_rate = 44100;
+    _faacConfig.sample_size = 16;
     AudioBufferList outAudioBufferList = {0};
     outAudioBufferList.mNumberBuffers = 1;
     outAudioBufferList.mBuffers[0].mNumberChannels = (uint32_t)self.audioConfig.channelCount;
