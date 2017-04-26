@@ -32,15 +32,15 @@
 
 @implementation AWSystemAVCapture
 
--(void)switchCamera{
-    if ([self.videoInputDevice isEqual: self.frontCamera]) {
+- (void)switchCamera {
+    if ([self.videoInputDevice isEqual:self.frontCamera]) {
         self.videoInputDevice = self.backCamera;
-    }else{
+    } else{
         self.videoInputDevice = self.frontCamera;
     }
     
     //更新fps
-    [self updateFps: self.videoConfig.fps];
+    [self updateFps:self.videoConfig.fps];
 }
 
 - (void)onInit {
@@ -159,7 +159,7 @@
 }
 
 //创建会话
--(void) createCaptureSession{
+- (void)createCaptureSession{
     self.captureSession = [AVCaptureSession new];
     
     [self.captureSession beginConfiguration];

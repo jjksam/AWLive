@@ -16,6 +16,7 @@
 @property (nonatomic, strong) UIButton *startBtn;
 @property (nonatomic, strong) UILabel *stateText;
 @property (assign) BOOL isPublishing;
+@property (assign) BOOL useFrontCamera;
 
 @end
 
@@ -37,6 +38,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.useFrontCamera = YES;
     // Do any additional setup after loading the view.
     _preview = [UIView new];
     [self.view addSubview:_preview];
@@ -77,11 +79,26 @@
     [self.stateText autoPinEdgeToSuperviewEdge:ALEdgeLeading withInset:30];
     [self.stateText autoPinEdgeToSuperviewEdge:ALEdgeTop withInset:64];
     
+    UIButton *switchCamera = [[UIButton alloc] initForAutoLayout];
+    [switchCamera setTitle:@"switch cam" forState:UIControlStateNormal];
+    [switchCamera addTarget:self action:@selector(onSwitchCamera) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:switchCamera];
+    
+    [switchCamera autoSetDimensionsToSize:CGSizeMake(100, 44)];
+    [switchCamera autoPinEdgeToSuperviewEdge:ALEdgeTrailing withInset:8];
+    [switchCamera autoPinEdgeToSuperviewEdge:ALEdgeBottom withInset:50];
+    
     _api = [[RSCLiveApi alloc] init];
     _api.delegate = self;
+    [_api setFrontCam:self.useFrontCamera];
     [_api setAppOrientation:self.orientation];
     [_api setPreviewView:_preview];
     [_api startPreview];
+}
+
+- (void)onSwitchCamera {
+    self.useFrontCamera = !self.useFrontCamera;
+    [_api setFrontCam:self.useFrontCamera];
 }
 
 - (void)onClose {

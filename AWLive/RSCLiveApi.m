@@ -51,6 +51,14 @@
     return capture;
 }
 
+/// \brief 设置是否使用前置摄像头
+/// \param bFront 使用前置摄像头
+/// \return true:调用成功；false:调用失败
+- (bool)setFrontCam:(bool)bFront {
+    [self.avCapture switchCamera];
+    return true;
+}
+
 - (bool)setPreviewView:(UIView *)view {
     if (view == nil)
         return false;
