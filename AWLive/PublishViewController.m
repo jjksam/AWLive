@@ -6,21 +6,82 @@
 //
 //
 
+#import <AVFoundation/AVFoundation.h>
 #import "PublishViewController.h"
 #import "RSCLiveApi.h"
 #import "PureLayout.h"
 #import "aw_rtmp.h" // should hide
 
-@interface PublishViewController () <RSCLivePublisherDelegate>
+
+@interface PublishViewController () <RSCLivePublisherDelegate> {
+    AudioQueueRef m_queue;
+    dispatch_source_t timer;
+}
 @property (nonatomic, strong) RSCLiveApi *api;
 @property (nonatomic, strong) UIButton *startBtn;
 @property (nonatomic, strong) UILabel *stateText;
+
+@property (nonatomic, strong) UIProgressView *progressView;
+@property (nonatomic, strong) AVAudioSession *audioSession;
+
 @property (assign) BOOL isPublishing;
 @property (assign) BOOL useFrontCamera;
 
 @end
 
 @implementation PublishViewController
+
+- (void)dealloc {
+//    [[AVAudioSession sharedInstance] removeObserver:self forKeyPath:@"inputGain"];
+}
+
+static void AudioInputCallback(
+                               void* inUserData,
+                               AudioQueueRef inAQ,
+                               AudioQueueBufferRef inBuffer,
+                               const AudioTimeStamp *inStartTime,
+                               UInt32 inNumberPacketDescriptions,
+                               const AudioStreamPacketDescription *inPacketDescs)
+{
+    // 録音はしないので未実装
+}
+
+static void MyAudioQueuePropertyListenerProc(void *pParam, AudioQueueRef inAQ, AudioQueuePropertyID inID)
+{
+//    CAudioQueuePlayer* pPlayer = (CAudioQueuePlayer *)pParam;
+    
+    switch (inID) {
+        case kAudioQueueProperty_IsRunning:
+        {
+            UInt32 bRunning;
+            UInt32 size = sizeof(bRunning);
+            OSStatus result = AudioQueueGetProperty(inAQ, kAudioQueueProperty_IsRunning, &bRunning, &size);
+            if ((result == noErr) && (!bRunning))
+            {
+                NSLog(@"player stoped\n");
+            }
+        }
+            break;
+        case kAudioQueueProperty_CurrentLevelMeter:
+        {
+            // レベルを取得
+            AudioQueueLevelMeterState levelMeter;
+            UInt32 levelMeterSize = sizeof(AudioQueueLevelMeterState);
+            OSStatus result = AudioQueueGetProperty(inAQ, kAudioQueueProperty_CurrentLevelMeter, &levelMeter, &levelMeterSize);
+            if (result == noErr)
+            {
+                // 最大レベル、平均レベルを表示
+                NSLog(@"MyAudioQueuePropertyListenerProc callback");
+                NSLog(@"peakPower: %@", [NSString stringWithFormat:@"%.2f", levelMeter.mPeakPower]);
+                NSLog(@"averagePower: %@", [NSString stringWithFormat:@"%.2f", levelMeter.mAveragePower]);
+                printf("player stoped\n");
+            }
+            break;
+        }
+        default:
+            break;
+    }
+}
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
@@ -34,6 +95,14 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    // レベルの監視を停止する
+    dispatch_source_cancel(timer);
+//    [_timer invalidate];
+    [self stopUpdatingVolume];
 }
 
 - (void)viewDidLoad {
@@ -88,12 +157,146 @@
     [switchCamera autoPinEdgeToSuperviewEdge:ALEdgeTrailing withInset:8];
     [switchCamera autoPinEdgeToSuperviewEdge:ALEdgeBottom withInset:50];
     
+    
+    _progressView = [[UIProgressView alloc] initForAutoLayout];
+    [_progressView setProgressTintColor:[UIColor greenColor]];
+    [_progressView setTrackTintColor:[UIColor blackColor]];
+    [_progressView setTintColor:[UIColor blackColor]];
+    [_progressView setProgress:0];
+    [self.view addSubview:_progressView];
+    
+    [_progressView autoSetDimensionsToSize:CGSizeMake(100, 10)];
+    [_progressView autoPinEdgeToSuperviewEdge:ALEdgeLeading withInset:8];
+    [_progressView autoPinEdgeToSuperviewEdge:ALEdgeBottom withInset:30];
+    
+    // 音を拾う
+    [self startUpdatingVolume];
+/*
+    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error:nil];
+    [[AVAudioSession sharedInstance] setActive:YES error:nil];
+    [[AVAudioSession sharedInstance] addObserver:self
+                                      forKeyPath:@"inputGain"
+                                         options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld
+                                         context:(void *)[AVAudioSession sharedInstance]];
+    [[AVAudioSession sharedInstance] addObserver:self
+                                      forKeyPath:@"outputVolume"
+                                         options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld
+                                         context:(void *)[AVAudioSession sharedInstance]];
+ */
+    NSError* error;
+    self.audioSession = [AVAudioSession sharedInstance];
+    
+    if (self.audioSession.isInputGainSettable) {
+        [self.audioSession addObserver:self forKeyPath:@"inputGain" options:0 context:nil];
+        BOOL success = [self.audioSession setInputGain:0.5
+                                                 error:&error];
+        if (!success) {
+//            return false;
+        } //error handling
+    } else {
+        NSLog(@"ios6 - cannot set input gain");
+//        return false;
+    }
+    if (UIInterfaceOrientationIsLandscape(self.orientation)) {
+        NSNumber *orientationUnknown = [NSNumber numberWithInt:UIInterfaceOrientationUnknown];
+        [[UIDevice currentDevice] setValue:orientationUnknown forKey:@"orientation"];
+        
+        NSNumber *orientationTarget = [NSNumber numberWithInt:UIInterfaceOrientationLandscapeLeft];
+        [[UIDevice currentDevice] setValue:orientationTarget forKey:@"orientation"];
+    } else {
+        NSNumber *orientationUnknown = [NSNumber numberWithInt:UIInterfaceOrientationUnknown];
+        [[UIDevice currentDevice] setValue:orientationUnknown forKey:@"orientation"];
+        
+        NSNumber *orientationTarget = [NSNumber numberWithInt:UIInterfaceOrientationPortrait];
+        [[UIDevice currentDevice] setValue:orientationTarget forKey:@"orientation"];
+    }
     _api = [[RSCLiveApi alloc] init];
     _api.delegate = self;
     [_api setFrontCam:self.useFrontCamera];
     [_api setAppOrientation:self.orientation];
     [_api setPreviewView:_preview];
     [_api startPreview];
+}
+
+
+- (void)startUpdatingVolume
+{
+    // 記録するデータフォーマットを決める
+    AudioStreamBasicDescription dataFormat;
+    dataFormat.mSampleRate = 44100.0f;
+    dataFormat.mFormatID = kAudioFormatLinearPCM;
+    dataFormat.mFormatFlags = kLinearPCMFormatFlagIsBigEndian | kLinearPCMFormatFlagIsSignedInteger | kLinearPCMFormatFlagIsPacked;
+    dataFormat.mBytesPerPacket = 2;
+    dataFormat.mFramesPerPacket = 1;
+    dataFormat.mBytesPerFrame = 2;
+    dataFormat.mChannelsPerFrame = 1;
+    dataFormat.mBitsPerChannel = 16;
+    dataFormat.mReserved = 0;
+    
+    // レベルの監視を開始する
+    AudioQueueNewInput(&dataFormat, AudioInputCallback, (__bridge void *)(self), CFRunLoopGetCurrent(), kCFRunLoopCommonModes, 0, &m_queue);
+    AudioQueueStart(m_queue, NULL);
+    
+    // レベルメータを有効化する
+    UInt32 enabledLevelMeter = true;
+    AudioQueueSetProperty(m_queue, kAudioQueueProperty_EnableLevelMetering, &enabledLevelMeter, sizeof(UInt32));
+    
+    // add level meter property listener
+    OSStatus ecode;
+    // kAudioQueueProperty_CurrentLevelMeterDB The member values in the structure are in decibels. 分贝值表示
+    ecode = AudioQueueAddPropertyListener(m_queue, kAudioQueueProperty_CurrentLevelMeter, MyAudioQueuePropertyListenerProc, (__bridge void *)(self));
+    ecode = AudioQueueAddPropertyListener(m_queue, kAudioQueueProperty_IsRunning, MyAudioQueuePropertyListenerProc, (__bridge void *)(self));
+
+    // 定期的にレベルメータを監視する
+    // timer
+    timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_get_main_queue());
+    dispatch_source_set_timer(timer, DISPATCH_TIME_NOW, 0.04 * NSEC_PER_SEC, 0.04 * NSEC_PER_SEC);
+    __weak typeof (self) wself = self;
+    dispatch_source_set_event_handler(timer, ^{
+        [wself detectVolume:nil];
+    });
+    dispatch_resume(timer);
+}
+
+- (void)stopUpdatingVolume
+{
+    // キューを空にして停止
+    AudioQueueFlush(m_queue);
+    AudioQueueStop(m_queue, NO);
+    AudioQueueDispose(m_queue, YES);
+}
+
+- (void)detectVolume:(NSTimer *)timer
+{
+    // レベルを取得
+    AudioQueueLevelMeterState levelMeter;
+    UInt32 levelMeterSize = sizeof(AudioQueueLevelMeterState);
+    AudioQueueGetProperty(m_queue, kAudioQueueProperty_CurrentLevelMeter, &levelMeter, &levelMeterSize);
+    
+    // 最大レベル、平均レベルを表示
+//    NSLog(@"peakPower: %@", [NSString stringWithFormat:@"%.2f", levelMeter.mPeakPower]);
+//    NSLog(@"averagePower: %@", [NSString stringWithFormat:@"%.2f", levelMeter.mAveragePower]);
+    self.progressView.progress = levelMeter.mAveragePower;
+    [self.progressView setNeedsDisplay];
+//    self.peakTextField.text = [NSString stringWithFormat:@"%.2f", levelMeter.mPeakPower];
+//    self.averageTextField.text = [NSString stringWithFormat:@"%.2f", levelMeter.mAveragePower];
+    
+    // mPeakPowerが -1.0 以上なら "LOUD!!" と表示
+//    self.loudLabel.hidden = (levelMeter.mPeakPower >= -1.0f) ? NO : YES;
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if(context == (__bridge void *)[AVAudioSession sharedInstance]) {
+           float newValue = [[change objectForKey:@"new"] floatValue];
+           float oldValue = [[change objectForKey:@"old"] floatValue];
+       }
+    if ([keyPath isEqualToString:@"inputGain"]) {
+        if (object == self.audioSession) {
+            NSLog(@"inputGain: %0.1f", self.audioSession.inputGain);
+            [self.progressView setProgress:self.audioSession.inputGain];
+        }
+    }
 }
 
 - (void)onSwitchCamera {

@@ -13,6 +13,7 @@
 @property (nonatomic, strong) AWAVCaptureManager *captureManager;
 @property (nonatomic, strong) UIView *preview;
 @property (nonatomic, strong) RSCAVConfig *avConfig;
+@property (nonatomic, strong) AVAudioSession *audioSession;
 
 @end
 
@@ -68,6 +69,23 @@
 
 - (bool)startPreview {
     [self.avCapture setPreview:self.preview];
+    return true;
+}
+
+- (bool)changeGainValue:(float)value {
+    CGFloat gain = value;
+    NSError* error;
+    self.audioSession = [AVAudioSession sharedInstance];
+    if (self.audioSession.isInputGainSettable) {
+        BOOL success = [self.audioSession setInputGain:gain
+                                                 error:&error];
+        if (!success) {
+            return false;
+        } //error handling
+    } else {
+        NSLog(@"ios6 - cannot set input gain");
+        return false;
+    }
     return true;
 }
 

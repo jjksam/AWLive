@@ -139,6 +139,9 @@ typedef enum {
 
 //- (bool)takePreviewSnapshot:(RSCSnapshotCompletionBlock)blk;
 
+// 改变输入增益 范围float 0.0~1.0
+- (bool)changeGainValue:(float)value;
+
 @end
 
 @protocol RSCLivePublisherDelegate <NSObject>
