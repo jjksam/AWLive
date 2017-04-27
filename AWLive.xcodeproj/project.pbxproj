@@ -14,6 +14,8 @@
 		005A71FF1E8210C800A21B64 /* NSLayoutConstraint+PureLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 005A71F71E8210C700A21B64 /* NSLayoutConstraint+PureLayout.m */; };
 		005A72001E8210C800A21B64 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 005A71FB1E8210C800A21B64 /* README.md */; };
 		00E37B001E84CA4C0083F62C /* RSCLiveApi.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E37AFF1E84CA4C0083F62C /* RSCLiveApi.m */; };
+		00F689751EB097D20084425A /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00F689741EB097D20084425A /* AVFoundation.framework */; };
+		00F689791EB0B1170084425A /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00F689781EB0B1170084425A /* CoreAudio.framework */; };
 		A4269D5C1DCE2A1B0010A4EB /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A4269D5B1DCE2A1B0010A4EB /* main.m */; };
 		A4269D5F1DCE2A1B0010A4EB /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A4269D5E1DCE2A1B0010A4EB /* AppDelegate.m */; };
 		A4269D621DCE2A1B0010A4EB /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4269D611DCE2A1B0010A4EB /* ViewController.m */; };
@@ -110,6 +112,8 @@
 		005A71FB1E8210C800A21B64 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		00E37AFE1E84CA4C0083F62C /* RSCLiveApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSCLiveApi.h; sourceTree = "<group>"; };
 		00E37AFF1E84CA4C0083F62C /* RSCLiveApi.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSCLiveApi.m; sourceTree = "<group>"; };
+		00F689741EB097D20084425A /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		00F689781EB0B1170084425A /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		A4269D571DCE2A1B0010A4EB /* AWLive.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AWLive.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A4269D5B1DCE2A1B0010A4EB /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		A4269D5D1DCE2A1B0010A4EB /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -219,6 +223,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				00F689791EB0B1170084425A /* CoreAudio.framework in Frameworks */,
+				00F689751EB097D20084425A /* AVFoundation.framework in Frameworks */,
 				A4269F771DCE2A8E0010A4EB /* librtmp.a in Frameworks */,
 				A4269F761DCE2A8D0010A4EB /* libfaac.a in Frameworks */,
 				A4269F791DCE2A8E0010A4EB /* libyuv.a in Frameworks */,
@@ -263,6 +269,15 @@
 			path = PureLayout;
 			sourceTree = "<group>";
 		};
+		00F689731EB097D20084425A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				00F689781EB0B1170084425A /* CoreAudio.framework */,
+				00F689741EB097D20084425A /* AVFoundation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		A4269D4E1DCE2A1B0010A4EB = {
 			isa = PBXGroup;
 			children = (
@@ -270,6 +285,7 @@
 				A4269DA61DCE2A8C0010A4EB /* clibs */,
 				A4269D591DCE2A1B0010A4EB /* AWLive */,
 				A4269D581DCE2A1B0010A4EB /* Products */,
+				00F689731EB097D20084425A /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
