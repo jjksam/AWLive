@@ -32,6 +32,7 @@
 @implementation PublishViewController
 
 - (void)dealloc {
+    [UIApplication sharedApplication].idleTimerDisabled = NO;
 //    [[AVAudioSession sharedInstance] removeObserver:self forKeyPath:@"inputGain"];
 }
 
@@ -149,13 +150,14 @@ static void MyAudioQueuePropertyListenerProc(void *pParam, AudioQueueRef inAQ, A
     [self.stateText autoPinEdgeToSuperviewEdge:ALEdgeTop withInset:64];
     
     UIButton *switchCamera = [[UIButton alloc] initForAutoLayout];
+    [switchCamera setBackgroundColor:[UIColor blackColor]];
     [switchCamera setTitle:@"switch cam" forState:UIControlStateNormal];
     [switchCamera addTarget:self action:@selector(onSwitchCamera) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:switchCamera];
     
     [switchCamera autoSetDimensionsToSize:CGSizeMake(100, 44)];
     [switchCamera autoPinEdgeToSuperviewEdge:ALEdgeTrailing withInset:8];
-    [switchCamera autoPinEdgeToSuperviewEdge:ALEdgeBottom withInset:50];
+    [switchCamera autoPinEdgeToSuperviewEdge:ALEdgeBottom withInset:100];
     
     
     _progressView = [[UIProgressView alloc] initForAutoLayout];
@@ -305,15 +307,18 @@ static void MyAudioQueuePropertyListenerProc(void *pParam, AudioQueueRef inAQ, A
 }
 
 - (void)onClose {
+    [UIApplication sharedApplication].idleTimerDisabled = NO;
     [_api stopPublishing];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)onStartClick {
     if (self.isPublishing) {
+        [UIApplication sharedApplication].idleTimerDisabled = NO;
         [self.api stopPublishing];
         self.isPublishing = NO;
     } else {
+        [UIApplication sharedApplication].idleTimerDisabled = YES;
         [self.api startPublishingWithUrl:self.pushUrl];
         [self.startBtn setTitle:@"停止直播" forState:UIControlStateNormal];
     }
