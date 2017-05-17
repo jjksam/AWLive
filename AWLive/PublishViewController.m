@@ -308,6 +308,7 @@ static void MyAudioQueuePropertyListenerProc(void *pParam, AudioQueueRef inAQ, A
 
 - (void)onClose {
     [UIApplication sharedApplication].idleTimerDisabled = NO;
+    [self.audioSession removeObserver:self forKeyPath:@"inputGain"];
     [_api stopPublishing];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
