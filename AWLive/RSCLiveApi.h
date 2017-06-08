@@ -39,7 +39,7 @@ typedef enum {
 
 @interface RSCLiveApi : NSObject
 
-@property (assign) UIInterfaceOrientation appOrientation;
+@property (nonatomic, assign) UIInterfaceOrientation appOrientation;
 @property (nonatomic, weak) id<RSCLivePublisherDelegate> delegate;
 
 + (NSString *)version;
@@ -93,7 +93,7 @@ typedef enum {
 #if TARGET_OS_IPHONE
 /// \brief 设置手机姿势，用于校正主播输出视频朝向
 /// \param orientation 手机姿势
-- (void)setAppOrientation:(UIInterfaceOrientation)orientation;
+//- (void)setAppOrientation:(UIInterfaceOrientation)orientation;
 #endif
 
 /// \brief 主播方开启美颜功能

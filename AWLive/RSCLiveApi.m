@@ -103,6 +103,11 @@
     return true;
 }
 
+- (void)setAppOrientation:(UIInterfaceOrientation)orientation {
+    _appOrientation = orientation;
+    _captureManager.videoConfig.orientation = self.appOrientation;
+}
+
 #pragma mark 事件
 -(void)avCapture:(AWAVCapture *)capture stateChangeFrom:(aw_rtmp_state)fromState toState:(aw_rtmp_state)toState{
     if ([self.delegate respondsToSelector:@selector(onPublishStateChangeFrom:toState:)]) {

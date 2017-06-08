@@ -214,8 +214,8 @@ static void MyAudioQueuePropertyListenerProc(void *pParam, AudioQueueRef inAQ, A
     }
     _api = [[RSCLiveApi alloc] init];
     _api.delegate = self;
-    [_api setFrontCam:self.useFrontCamera];
     [_api setAppOrientation:self.orientation];
+    [_api setFrontCam:self.useFrontCamera];
     [_api setPreviewView:_preview];
     [_api startPreview];
 }
