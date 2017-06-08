@@ -2,6 +2,7 @@
 Modification base on the code. Will be able to push stream to some rtmp push address with either Portrait or Landscape oriention.
 
 TODO: integrate with Android SDK so the SDK will be available to Android & iOS platform.
+---
 功能范围
 ---
 - 视频捕获：系统方法捕获，GPUImage捕获，CMSampleRef解析
