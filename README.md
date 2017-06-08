@@ -17,5 +17,5 @@ TODO: integrate with Android SDK so the SDK will be available to Android & iOS p
 代码使用及注意
 ---
 
-注1：项目中所有相关的文件名，类名，全局变量，全局方法都会加AW/aw作为前缀。
-注2：项目中关键代码都使用c语言编写，理论上可以很容易地移植到android中。
+- 注1：项目中所有相关的文件名，类名，全局变量，全局方法都会加AW/aw作为前缀。
+- 注2：项目中关键代码都使用c语言编写，理论上可以很容易地移植到android中。
