@@ -58,6 +58,8 @@
         self.height = 960;
 //        self.width = 360;
 //        self.height = 640;
+//        self.width = 480;
+//        self.height = 640;
         self.bitrate = 800000; // 800kbps
         self.fps = 20;
         self.dataFormat = X264_CSP_NV12;

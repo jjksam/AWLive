@@ -212,9 +212,15 @@ static void MyAudioQueuePropertyListenerProc(void *pParam, AudioQueueRef inAQ, A
         NSNumber *orientationTarget = [NSNumber numberWithInt:UIInterfaceOrientationPortrait];
         [[UIDevice currentDevice] setValue:orientationTarget forKey:@"orientation"];
     }
+    RSCAVConfig *avConfig = [RSCAVConfig presetConfigOf:RSCAVConfigPreset_High];
+    avConfig.fps = RSCAVConfigVideoFps_Generic;
+    avConfig.bitrate = RSCAVConfigVideoBitrate_High;
+    avConfig.videoCaptureResolution = CGSizeMake(540, 960);
+    avConfig.videoEncodeResolution = CGSizeMake(540, 960); // 非标准分辨率需要使用软编码，否则出现花屏，绿屏现象。
     _api = [[RSCLiveApi alloc] init];
     _api.delegate = self;
-    [_api setAppOrientation:self.orientation];
+    [_api setAppOrientation:self.orientation]; // 需要先设置orientation
+    [_api setAVConfig:avConfig]; // 需要先设置config才能设置摄像头，否则使用默认参数
     [_api setFrontCam:self.useFrontCamera];
     [_api setPreviewView:_preview];
     [_api startPreview];

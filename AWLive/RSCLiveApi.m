@@ -17,6 +17,14 @@
 
 @end
 
+@implementation RSCAVConfig
+
++ (instancetype)presetConfigOf:(RSCAVConfigPreset)preset {
+    RSCAVConfig *avConfig = [[RSCAVConfig alloc] init];
+    return avConfig;
+}
+
+@end
 @implementation RSCLiveApi
 
 + (NSString *)version {
@@ -29,6 +37,7 @@
         _captureManager = [[AWAVCaptureManager alloc] init];
         
 //下面的3个类型必须设置，否则获取不到AVCapture
+// TODO: 可配置是否软编码处理
 //        _captureManager.captureType = AWAVCaptureTypeGPUImage; // GPUImage过滤，iPhone 6 CPU 60%以上
         _captureManager.captureType = AWAVCaptureTypeSystem; // 系统视频捕获推流, iPhone 6 CPU 40%左右
         _captureManager.audioEncoderType = AWAudioEncoderTypeHWAACLC;
@@ -36,10 +45,17 @@
 //        _captureManager.audioEncoderType = AWAudioEncoderTypeSWFAAC; // 软编码，iPhone 5需要使用声音软编码
 //        _captureManager.videoEncoderType = AWVideoEncoderTypeSWX264; // 软编码，停止推流会崩溃, iPhone 5/5s没法用硬件加速
         _captureManager.audioConfig = [[AWAudioConfig alloc] init];
-        _captureManager.videoConfig = [[AWVideoConfig alloc] init];
+        AWVideoConfig *videoConfig = [[AWVideoConfig alloc] init];
+        if (self.avConfig) {
+            videoConfig.width = self.avConfig.videoCaptureResolution.width;
+            videoConfig.height = self.avConfig.videoCaptureResolution.height;
+            videoConfig.bitrate = self.avConfig.bitrate;
+            videoConfig.fps = self.avConfig.fps;
+        }
+        _captureManager.videoConfig = videoConfig;
         
         // 竖屏推流
-        _captureManager.videoConfig.orientation = self.appOrientation;
+        _captureManager.videoConfig.orientation = self.orientation;
         // 横屏推流
 //        _captureManager.videoConfig.orientation = UIInterfaceOrientationLandscapeRight;
     }
@@ -103,9 +119,19 @@
     return true;
 }
 
-- (void)setAppOrientation:(UIInterfaceOrientation)orientation {
-    _appOrientation = orientation;
-    _captureManager.videoConfig.orientation = self.appOrientation;
+- (bool)setAppOrientation:(UIInterfaceOrientation)orientation {
+    _orientation = orientation;
+    _captureManager.videoConfig.orientation = self.orientation;
+    return true;
+}
+
+
+/// \brief 设置视频配置
+/// \param config 配置参数
+/// \return true 成功，false 失败
+- (bool)setAVConfig:(RSCAVConfig *)config {
+    self.avConfig = config;
+    return true;
 }
 
 #pragma mark 事件

@@ -40,9 +40,14 @@ static NSString *sRtmpUrl = @"";
     [self.view addSubview:portraitPush];
     
     _textField = [[UITextField alloc] initForAutoLayout];
-    _textField.text = sRtmpUrl;
     _textField.borderStyle = UITextBorderStyleLine;
     [self.view addSubview:_textField];
+
+    NSString *rtmpUrl = [[NSUserDefaults standardUserDefaults] stringForKey:@"RTMPURL"];
+    if (rtmpUrl.length > 0) {
+        sRtmpUrl = rtmpUrl;
+        _textField.text = sRtmpUrl;
+    }
     
     [landscapePush autoSetDimensionsToSize:CGSizeMake(100, 44)];
     [landscapePush autoPinEdgeToSuperviewEdge:ALEdgeTop withInset:90];
@@ -57,10 +62,18 @@ static NSString *sRtmpUrl = @"";
     [_textField autoSetDimensionsToSize:CGSizeMake([UIScreen mainScreen].bounds.size.width, 44)];
 }
 
+- (void)saveURL {
+    if (_textField.text.length > 0) {
+        [[NSUserDefaults standardUserDefaults] setObject:_textField.text forKey:@"RTMPURL"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+}
+
 - (void)landscapePush {
     self.vc = [PublishViewController new];
     self.vc.orientation = UIInterfaceOrientationLandscapeRight;
     self.vc.pushUrl = self.textField.text;
+    [self saveURL];
     [self presentViewController:self.vc animated:YES completion:nil];
 }
 
@@ -68,6 +81,7 @@ static NSString *sRtmpUrl = @"";
     self.vc = [PublishViewController new];
     self.vc.orientation = UIInterfaceOrientationPortrait;
     self.vc.pushUrl = self.textField.text;
+    [self saveURL];
     [self presentViewController:self.vc animated:YES completion:nil];
 }
 

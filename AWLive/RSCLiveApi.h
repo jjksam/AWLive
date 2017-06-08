@@ -19,6 +19,24 @@ typedef enum {
     RSCAVConfigPreset_Veryhigh = 4
 } RSCAVConfigPreset;
 
+typedef enum {
+    RSCAVConfigVideoFps_Verylow    = 5,
+    RSCAVConfigVideoFps_Low        = 10,
+    RSCAVConfigVideoFps_Generic    = 15,
+    RSCAVConfigVideoFps_High       = 20,
+    RSCAVConfigVideoFps_Veryhigh   = 25,
+    RSCAVConfigVideoFps_Superhigh  = 30
+} RSCAVConfigVideoFps;
+
+typedef enum {
+    RSCAVConfigVideoBitrate_Verylow    = 250*1000,
+    RSCAVConfigVideoBitrate_Low        = 300*1000,
+    RSCAVConfigVideoBitrate_Generic    = 480*1000,
+    RSCAVConfigVideoBitrate_High       = 600*1000,
+    RSCAVConfigVideoBitrate_Veryhigh   = 800*1000,
+    RSCAVConfigVideoBitrate_Superhigh  = 1000*1000
+} RSCAVConfigVideoBitrate;
+
 /// \brief 推流视频配置
 @interface RSCAVConfig : NSObject
 
@@ -39,7 +57,7 @@ typedef enum {
 
 @interface RSCLiveApi : NSObject
 
-@property (nonatomic, assign) UIInterfaceOrientation appOrientation;
+@property (assign) UIInterfaceOrientation orientation;
 @property (nonatomic, weak) id<RSCLivePublisherDelegate> delegate;
 
 + (NSString *)version;
@@ -84,6 +102,8 @@ typedef enum {
 /// \param bRequire 开关
 /// \note ！！！打开硬编硬解开关需后台可控，避免碰到版本升级或者硬件升级时出现硬编硬解失败的问题
 + (bool)requireHardwareEncoder:(bool)bRequire;
+
+- (bool)setAppOrientation:(UIInterfaceOrientation)orientation;
 
 /// \brief 设置视频配置
 /// \param config 配置参数
