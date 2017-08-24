@@ -26,6 +26,7 @@
 
 @property (assign) BOOL isPublishing;
 @property (assign) BOOL useFrontCamera;
+@property (assign) OSStatus audioQueueStatus;
 
 @end
 
@@ -103,7 +104,7 @@ static void MyAudioQueuePropertyListenerProc(void *pParam, AudioQueueRef inAQ, A
     // レベルの監視を停止する
     dispatch_source_cancel(timer);
 //    [_timer invalidate];
-    [self stopUpdatingVolume];
+//    [self stopUpdatingVolume];
 }
 
 - (void)viewDidLoad {
@@ -172,7 +173,7 @@ static void MyAudioQueuePropertyListenerProc(void *pParam, AudioQueueRef inAQ, A
     [_progressView autoPinEdgeToSuperviewEdge:ALEdgeBottom withInset:30];
     
     // 音を拾う
-    [self startUpdatingVolume];
+//    [self startUpdatingVolume]; // iPhone 7/7Plus会有问题。
 /*
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error:nil];
     [[AVAudioSession sharedInstance] setActive:YES error:nil];
@@ -243,35 +244,38 @@ static void MyAudioQueuePropertyListenerProc(void *pParam, AudioQueueRef inAQ, A
     
     // レベルの監視を開始する
     AudioQueueNewInput(&dataFormat, AudioInputCallback, (__bridge void *)(self), CFRunLoopGetCurrent(), kCFRunLoopCommonModes, 0, &m_queue);
-    AudioQueueStart(m_queue, NULL);
-    
-    // レベルメータを有効化する
-    UInt32 enabledLevelMeter = true;
-    AudioQueueSetProperty(m_queue, kAudioQueueProperty_EnableLevelMetering, &enabledLevelMeter, sizeof(UInt32));
-    
-    // add level meter property listener
-    OSStatus ecode;
-    // kAudioQueueProperty_CurrentLevelMeterDB The member values in the structure are in decibels. 分贝值表示
-    ecode = AudioQueueAddPropertyListener(m_queue, kAudioQueueProperty_CurrentLevelMeter, MyAudioQueuePropertyListenerProc, (__bridge void *)(self));
-    ecode = AudioQueueAddPropertyListener(m_queue, kAudioQueueProperty_IsRunning, MyAudioQueuePropertyListenerProc, (__bridge void *)(self));
+    self.audioQueueStatus = AudioQueueStart(m_queue, NULL);
+    if (self.audioQueueStatus == noErr) {
+        // レベルメータを有効化する
+        UInt32 enabledLevelMeter = true;
+        AudioQueueSetProperty(m_queue, kAudioQueueProperty_EnableLevelMetering, &enabledLevelMeter, sizeof(UInt32));
+        
+        // add level meter property listener
+        OSStatus ecode;
+        // kAudioQueueProperty_CurrentLevelMeterDB The member values in the structure are in decibels. 分贝值表示
+        ecode = AudioQueueAddPropertyListener(m_queue, kAudioQueueProperty_CurrentLevelMeter, MyAudioQueuePropertyListenerProc, (__bridge void *)(self));
+        ecode = AudioQueueAddPropertyListener(m_queue, kAudioQueueProperty_IsRunning, MyAudioQueuePropertyListenerProc, (__bridge void *)(self));
 
-    // 定期的にレベルメータを監視する
-    // timer
-    timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_get_main_queue());
-    dispatch_source_set_timer(timer, DISPATCH_TIME_NOW, 0.04 * NSEC_PER_SEC, 0.04 * NSEC_PER_SEC);
-    __weak typeof (self) wself = self;
-    dispatch_source_set_event_handler(timer, ^{
-        [wself detectVolume:nil];
-    });
-    dispatch_resume(timer);
+        // 定期的にレベルメータを監視する
+        // timer
+        timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_get_main_queue());
+        dispatch_source_set_timer(timer, DISPATCH_TIME_NOW, 0.04 * NSEC_PER_SEC, 0.04 * NSEC_PER_SEC);
+        __weak typeof (self) wself = self;
+        dispatch_source_set_event_handler(timer, ^{
+            [wself detectVolume:nil];
+        });
+        dispatch_resume(timer);
+    }
 }
 
 - (void)stopUpdatingVolume
 {
     // キューを空にして停止
-    AudioQueueFlush(m_queue);
-    AudioQueueStop(m_queue, NO);
-    AudioQueueDispose(m_queue, YES);
+    if (self.audioQueueStatus == noErr) {
+        AudioQueueFlush(m_queue);
+        AudioQueueStop(m_queue, NO);
+        AudioQueueDispose(m_queue, YES);
+    }
 }
 
 - (void)detectVolume:(NSTimer *)timer
@@ -314,7 +318,9 @@ static void MyAudioQueuePropertyListenerProc(void *pParam, AudioQueueRef inAQ, A
 
 - (void)onClose {
     [UIApplication sharedApplication].idleTimerDisabled = NO;
-    [self.audioSession removeObserver:self forKeyPath:@"inputGain"];
+    if (self.audioSession.isInputGainSettable) {
+        [self.audioSession removeObserver:self forKeyPath:@"inputGain"];
+    }
     [_api stopPublishing];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
